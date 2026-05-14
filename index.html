@@ -18,6 +18,7 @@
             height: 100%;
             overflow: hidden;
             background: #000;
+            font-family: 'Segoe UI', sans-serif;
         }
 
         canvas {
@@ -56,7 +57,103 @@
             transform: translateY(-50%);
         }
 
-        #block-selector {
+        /* === HUD === */
+        #hud {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            pointer-events: none;
+            z-index: 10;
+            padding: 10px;
+        }
+
+        #hud-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        #stats-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 200px;
+        }
+
+        .stat-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .stat-icon {
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .stat-bar-bg {
+            width: 120px;
+            height: 12px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .stat-bar-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.3s, background-color 0.3s;
+        }
+
+        #hp-bar {
+            background-color: #2ecc71;
+        }
+
+        #ep-bar {
+            background-color: #3498db;
+        }
+
+        #hunger-bar {
+            background-color: #e67e22;
+        }
+
+        .stat-text {
+            color: #fff;
+            font-size: 11px;
+            font-weight: bold;
+            min-width: 50px;
+            text-align: right;
+        }
+
+        #time-panel {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 2px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 4px 10px;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        #time-display {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        #day-display {
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        /* === HOTBAR === */
+        #hotbar-container {
             position: fixed;
             bottom: 10px;
             left: 50%;
@@ -69,7 +166,7 @@
             border-radius: 4px;
         }
 
-        .block-slot {
+        .hotbar-slot {
             width: 48px;
             height: 48px;
             border: 2px solid #555;
@@ -77,32 +174,35 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 10px;
+            font-size: 9px;
             color: #fff;
             text-align: center;
             cursor: pointer;
             user-select: none;
+            background: rgba(0, 0, 0, 0.3);
         }
 
-        .block-slot.selected {
+        .hotbar-slot.selected {
             border-color: #fff;
             box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
         }
 
+        /* === INFO === */
         #info {
             position: fixed;
-            top: 10px;
+            top: 120px;
             left: 10px;
             color: #fff;
             font-family: monospace;
-            font-size: 14px;
+            font-size: 12px;
             z-index: 10;
             background: rgba(0, 0, 0, 0.5);
-            padding: 8px;
+            padding: 4px 8px;
             border-radius: 4px;
             pointer-events: none;
         }
 
+        /* === LOCK MESSAGE === */
         #lock-message {
             position: fixed;
             top: 50%;
@@ -118,14 +218,225 @@
             cursor: pointer;
             user-select: none;
         }
+
+        /* === INVENTORY OVERLAY === */
+        #inventory-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 30;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #inventory-title {
+            color: #fff;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        #inventory-grid {
+            display: grid;
+            grid-template-columns: repeat(9, 52px);
+            grid-template-rows: repeat(4, 52px);
+            gap: 2px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 8px;
+            border-radius: 8px;
+        }
+
+        .inventory-slot {
+            width: 52px;
+            height: 52px;
+            border: 2px solid #555;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            color: #fff;
+            text-align: center;
+            cursor: pointer;
+            user-select: none;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .inventory-slot:hover {
+            border-color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* === CRAFTING OVERLAY === */
+        #crafting-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 35;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #crafting-title {
+            color: #fff;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        #crafting-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 52px);
+            grid-template-rows: repeat(3, 52px);
+            gap: 2px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 8px;
+            border-radius: 8px;
+        }
+
+        .crafting-slot {
+            width: 52px;
+            height: 52px;
+            border: 2px solid #555;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            color: #fff;
+            text-align: center;
+            cursor: pointer;
+            user-select: none;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        #crafting-result {
+            width: 52px;
+            height: 52px;
+            border: 2px solid #f1c40f;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            color: #fff;
+            text-align: center;
+            cursor: pointer;
+            user-select: none;
+            background: rgba(0, 0, 0, 0.3);
+            margin-top: 10px;
+        }
+
+        /* === DEATH OVERLAY === */
+        #death-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(200, 0, 0, 0.6);
+            z-index: 40;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #death-title {
+            color: #fff;
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        #death-respawn {
+            color: #fff;
+            font-size: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        #death-respawn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
     </style>
 </head>
 
 <body>
     <div id="crosshair"></div>
-    <div id="block-selector"></div>
-    <div id="info">FPS: 0 | Position: 0,0,0 | Chunks: 0</div>
+
+    <!-- HUD -->
+    <div id="hud">
+        <div id="hud-top">
+            <div id="stats-panel">
+                <div class="stat-row">
+                    <span class="stat-icon">❤️</span>
+                    <div class="stat-bar-bg">
+                        <div class="stat-bar-fill" id="hp-bar"></div>
+                    </div>
+                    <span class="stat-text" id="hp-text">100/100</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-icon">⚡</span>
+                    <div class="stat-bar-bg">
+                        <div class="stat-bar-fill" id="ep-bar"></div>
+                    </div>
+                    <span class="stat-text" id="ep-text">100/100</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-icon">🍖</span>
+                    <div class="stat-bar-bg">
+                        <div class="stat-bar-fill" id="hunger-bar"></div>
+                    </div>
+                    <span class="stat-text" id="hunger-text">100/100</span>
+                </div>
+            </div>
+            <div id="time-panel">
+                <div id="time-display">06:00</div>
+                <div id="day-display">Day 1</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hotbar -->
+    <div id="hotbar-container"></div>
+
+    <!-- Info -->
+    <div id="info">FPS: 0 | Pos: 0,0,0 | Chunks: 0</div>
+
+    <!-- Lock message -->
     <div id="lock-message">Click to play</div>
+
+    <!-- Inventory -->
+    <div id="inventory-overlay">
+        <div id="inventory-title">Inventory (Press E to close)</div>
+        <div id="inventory-grid"></div>
+    </div>
+
+    <!-- Crafting -->
+    <div id="crafting-overlay">
+        <div id="crafting-title">Crafting Table</div>
+        <div id="crafting-grid"></div>
+        <div id="crafting-result">→</div>
+    </div>
+
+    <!-- Death -->
+    <div id="death-overlay">
+        <div id="death-title">You Died!</div>
+        <div id="death-respawn">Click to Respawn</div>
+    </div>
+
     <script type="module" src="/src/main.ts"></script>
 </body>
 
