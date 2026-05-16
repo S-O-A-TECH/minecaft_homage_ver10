@@ -202,25 +202,25 @@
             pointer-events: none;
         }
 
-        /* === LOCK MESSAGE === */
-        #lock-message {
+        /* === MODE INDICATOR === */
+        #mode-indicator {
             position: fixed;
-            top: 50%;
+            top: 10px;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translateX(-50%);
             color: #fff;
             font-family: sans-serif;
-            font-size: 24px;
-            z-index: 20;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 20px 40px;
-            border-radius: 8px;
-            cursor: pointer;
-            user-select: none;
+            font-size: 14px;
+            z-index: 15;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 6px 16px;
+            border-radius: 4px;
+            pointer-events: none;
+            display: none;
         }
 
-        /* === INVENTORY OVERLAY === */
-        #inventory-overlay {
+        /* === LOCK MESSAGE === */
+        #lock-message {
             position: fixed;
             top: 0;
             left: 0;
@@ -292,47 +292,224 @@
             margin-bottom: 10px;
         }
 
-        #crafting-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 52px);
-            grid-template-rows: repeat(3, 52px);
-            gap: 2px;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 8px;
-            border-radius: 8px;
+        #crafting-container {
+            display: flex;
+            gap: 20px;
+            max-width: 800px;
+            max-height: 500px;
+            width: 90%;
         }
 
-        .crafting-slot {
-            width: 52px;
-            height: 52px;
+        #recipe-list {
+            flex: 1;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            padding: 8px;
+            max-height: 500px;
+        }
+
+        #recipe-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #recipe-list::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 3px;
+        }
+
+        .recipe-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            color: #ccc;
+            font-size: 13px;
+            transition: background 0.15s;
+        }
+
+        .recipe-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .recipe-item.selected {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        .recipe-item.craftable {
+            color: #fff;
+        }
+
+        .recipe-icon {
+            font-size: 16px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .recipe-name {
+            flex: 1;
+        }
+
+        .recipe-table-req {
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        #recipe-detail {
+            flex: 1.5;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+        }
+
+        .recipe-detail-placeholder {
+            color: #888;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .recipe-detail-content {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .recipe-detail-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .recipe-result-icon {
+            font-size: 28px;
+        }
+
+        .recipe-result-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            flex: 1;
+        }
+
+        .recipe-can-craft {
+            font-size: 13px;
+            padding: 4px 10px;
+            border-radius: 4px;
+        }
+
+        .recipe-can-craft.craftable {
+            background: rgba(46, 204, 113, 0.3);
+            color: #2ecc71;
+        }
+
+        .recipe-can-craft.not-craftable {
+            background: rgba(231, 76, 60, 0.3);
+            color: #e74c3c;
+        }
+
+        .recipe-pattern-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 60px);
+            grid-template-rows: repeat(3, 60px);
+            gap: 3px;
+            justify-content: center;
+        }
+
+        .recipe-pattern-slot {
+            width: 60px;
+            height: 60px;
             border: 2px solid #555;
             border-radius: 4px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             font-size: 9px;
             color: #fff;
             text-align: center;
-            cursor: pointer;
-            user-select: none;
             background: rgba(0, 0, 0, 0.3);
         }
 
-        #crafting-result {
-            width: 52px;
-            height: 52px;
-            border: 2px solid #f1c40f;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .recipe-pattern-slot.has-item {
+            border-color: #2ecc71;
+            background: rgba(46, 204, 113, 0.15);
+        }
+
+        .recipe-pattern-slot.missing-item {
+            border-color: #e74c3c;
+            background: rgba(231, 76, 60, 0.15);
+        }
+
+        .recipe-pattern-slot.empty {
+            border-color: #333;
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .pattern-item-name {
             font-size: 9px;
-            color: #fff;
-            text-align: center;
+            line-height: 1.1;
+        }
+
+        .pattern-item-count {
+            font-size: 10px;
+            font-weight: bold;
+            margin-top: 2px;
+        }
+
+        .has-item .pattern-item-count {
+            color: #2ecc71;
+        }
+
+        .missing-item .pattern-item-count {
+            color: #e74c3c;
+        }
+
+        .recipe-missing {
+            color: #e74c3c;
+            font-size: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .missing-tag {
+            background: rgba(231, 76, 60, 0.2);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+
+        .craft-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
             cursor: pointer;
-            user-select: none;
-            background: rgba(0, 0, 0, 0.3);
-            margin-top: 10px;
+            background: #2ecc71;
+            color: #fff;
+            transition: background 0.2s;
+        }
+
+        .craft-button:hover {
+            background: #27ae60;
+        }
+
+        .craft-button.disabled {
+            background: #555;
+            color: #999;
+            cursor: not-allowed;
         }
 
         /* === DEATH OVERLAY === */
@@ -418,6 +595,9 @@
     <!-- Lock message -->
     <div id="lock-message">Click to play</div>
 
+    <!-- Mode indicator -->
+    <div id="mode-indicator">🖱️ Cursor Mode</div>
+
     <!-- Inventory -->
     <div id="inventory-overlay">
         <div id="inventory-title">Inventory (Press E to close)</div>
@@ -426,9 +606,13 @@
 
     <!-- Crafting -->
     <div id="crafting-overlay">
-        <div id="crafting-title">Crafting Table</div>
-        <div id="crafting-grid"></div>
-        <div id="crafting-result">→</div>
+        <div id="crafting-title">🔨 Crafting</div>
+        <div id="crafting-container">
+            <div id="recipe-list"></div>
+            <div id="recipe-detail">
+                <div class="recipe-detail-placeholder">Select a recipe to view details</div>
+            </div>
+        </div>
     </div>
 
     <!-- Death -->

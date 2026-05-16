@@ -1,10 +1,17 @@
+export type GameMode = 'game' | 'cursor' | 'ui';
+
 export class InputManager {
     public keys: Set<string> = new Set();
     public mouseDown: Set<number> = new Set();
     public mouseMoved: boolean = false;
     public mouseDX: number = 0;
     public mouseDY: number = 0;
-    public isPointerLocked: boolean = true;
+    public isPointerLocked: boolean = false;
+    public gameMode: GameMode = 'game';
+
+    // Cursor mode: screen-space mouse position (normalized 0-1)
+    public cursorX: number = 0.5;
+    public cursorY: number = 0.5;
 
     private onKeyDown: (e: KeyboardEvent) => void;
     private onKeyUp: (e: KeyboardEvent) => void;
@@ -12,6 +19,7 @@ export class InputManager {
     private onMouseUp: (e: MouseEvent) => void;
     private onMouseMove: (e: MouseEvent) => void;
     private onPointerLockChange: () => void;
+    private onContextMenu: (e: Event) => void;
 
     constructor() {
         this.onKeyDown = (e: KeyboardEvent) => {
@@ -31,15 +39,34 @@ export class InputManager {
         };
 
         this.onMouseMove = (e: MouseEvent) => {
-            if (this.isPointerLocked) {
+            if (this.gameMode === 'game' && this.isPointerLocked) {
+                // Game mode: accumulate movement for camera rotation
                 this.mouseDX += e.movementX;
                 this.mouseDY += e.movementY;
                 this.mouseMoved = true;
+            } else if (this.gameMode === 'cursor') {
+                // Cursor mode: track screen position for raycasting
+                this.cursorX = e.clientX / window.innerWidth;
+                this.cursorY = e.clientY / window.innerHeight;
+                this.mouseMoved = true;
             }
+            // UI mode: ignore mouse movement for camera
         };
 
         this.onPointerLockChange = () => {
+            const wasLocked = this.isPointerLocked;
             this.isPointerLocked = document.pointerLockElement !== null;
+
+            if (!this.isPointerLocked && wasLocked) {
+                // Pointer lock was released externally (e.g., Esc key)
+                if (this.gameMode === 'game') {
+                    this.gameMode = 'cursor';
+                }
+            }
+        };
+
+        this.onContextMenu = (e: Event) => {
+            e.preventDefault();
         };
 
         document.addEventListener('keydown', this.onKeyDown);
@@ -48,6 +75,7 @@ export class InputManager {
         document.addEventListener('mouseup', this.onMouseUp);
         document.addEventListener('mousemove', this.onMouseMove);
         document.addEventListener('pointerlockchange', this.onPointerLockChange);
+        document.addEventListener('contextmenu', this.onContextMenu);
     }
 
     isKeyDown(code: string): boolean {
@@ -71,6 +99,28 @@ export class InputManager {
         document.body.requestPointerLock();
     }
 
+    exitPointerLock(): void {
+        if (document.pointerLockElement) {
+            document.exitPointerLock();
+        }
+    }
+
+    setGameMode(mode: GameMode): void {
+        this.gameMode = mode;
+
+        if (mode === 'game') {
+            // Request pointer lock for game mode
+            if (!this.isPointerLocked) {
+                this.requestPointerLock();
+            }
+        } else {
+            // Release pointer lock for cursor/UI modes
+            if (this.isPointerLocked) {
+                this.exitPointerLock();
+            }
+        }
+    }
+
     dispose(): void {
         document.removeEventListener('keydown', this.onKeyDown);
         document.removeEventListener('keyup', this.onKeyUp);
@@ -78,5 +128,6 @@ export class InputManager {
         document.removeEventListener('mouseup', this.onMouseUp);
         document.removeEventListener('mousemove', this.onMouseMove);
         document.removeEventListener('pointerlockchange', this.onPointerLockChange);
+        document.removeEventListener('contextmenu', this.onContextMenu);
     }
 }

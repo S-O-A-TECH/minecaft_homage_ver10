@@ -10,11 +10,28 @@ export class BlockRaycaster {
         this.world = world;
     }
 
-    cast(camera: THREE.PerspectiveCamera): RaycastResult | null {
-        const direction = new THREE.Vector3(0, 0, -1).applyQuaternion(camera.quaternion);
-        direction.normalize();
+    cast(camera: THREE.PerspectiveCamera, screenX?: number, screenY?: number): RaycastResult | null {
+        let direction: THREE.Vector3;
+        let origin: THREE.Vector3;
 
-        const origin = camera.position.clone();
+        if (screenX !== undefined && screenY !== undefined) {
+            // Use screen coordinates (for cursor mode)
+            // Convert normalized screen coords (0-1) to NDC (-1 to 1)
+            const ndc = new THREE.Vector2(
+                screenX * 2 - 1,
+                -(screenY * 2 - 1)
+            );
+
+            const raycaster = new THREE.Raycaster();
+            raycaster.setFromCamera(ndc, camera);
+            direction = raycaster.ray.direction.clone();
+            origin = raycaster.ray.origin.clone();
+        } else {
+            // Use camera center (for game mode)
+            direction = new THREE.Vector3(0, 0, -1).applyQuaternion(camera.quaternion);
+            direction.normalize();
+            origin = camera.position.clone();
+        }
         const maxDistance = CONFIG.reachDistance;
         const step = 0.05;
 

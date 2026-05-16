@@ -1,4 +1,4 @@
-import { BlockType, ItemType, GameConfig, FoodItem, BiomeType, BiomeData } from './types';
+import { BlockType, ItemType, GameConfig, FoodItem, BiomeType, BiomeData, CraftingRecipe } from './types';
 
 export const CONFIG: GameConfig = {
     chunkSize: 16,
@@ -343,3 +343,312 @@ export const HEATSTROKE_THRESHOLD = 40;
 export const EP_DAMAGE_HYPOTHERMIA = 5; // per second
 export const EP_DAMAGE_HEATSTROKE = 3; // per second
 export const HP_DAMAGE_HEATSTROKE = 1; // per second
+
+// === CRAFTING RECIPES ===
+// null means empty slot in the pattern
+export const CRAFTING_RECIPES: CraftingRecipe[] = [
+    // Planks (from Wood)
+    {
+        result: ItemType.PLANKS_BLOCK,
+        count: 4,
+        pattern: [[ItemType.WOOD_BLOCK, null, null], [null, null, null], [null, null, null]],
+        requiresCraftingTable: false,
+    },
+    // Crafting Table
+    {
+        result: ItemType.CRAFTING_TABLE_BLOCK,
+        count: 1,
+        pattern: [
+            [ItemType.PLANKS_BLOCK, ItemType.PLANKS_BLOCK, null],
+            [ItemType.PLANKS_BLOCK, ItemType.PLANKS_BLOCK, null],
+            [null, null, null],
+        ],
+        requiresCraftingTable: false,
+    },
+    // Sticks (from Planks)
+    {
+        result: ItemType.STICK,
+        count: 4,
+        pattern: [
+            [ItemType.PLANKS_BLOCK, null, null],
+            [ItemType.PLANKS_BLOCK, null, null],
+            [null, null, null],
+        ],
+        requiresCraftingTable: false,
+    },
+    // Wooden Pickaxe
+    {
+        result: ItemType.WOODEN_PICKAXE,
+        count: 1,
+        pattern: [
+            [ItemType.PLANKS_BLOCK, ItemType.PLANKS_BLOCK, ItemType.PLANKS_BLOCK],
+            [null, ItemType.STICK, null],
+            [null, ItemType.STICK, null],
+        ],
+        requiresCraftingTable: true,
+    },
+    // Stone Pickaxe
+    {
+        result: ItemType.STONE_PICKAXE,
+        count: 1,
+        pattern: [
+            [ItemType.COBBLESTONE_BLOCK, ItemType.COBBLESTONE_BLOCK, ItemType.COBBLESTONE_BLOCK],
+            [null, ItemType.STICK, null],
+            [null, ItemType.STICK, null],
+        ],
+        requiresCraftingTable: true,
+    },
+    // Iron Pickaxe
+    {
+        result: ItemType.IRON_PICKAXE,
+        count: 1,
+        pattern: [
+            [ItemType.IRON_INGOT, ItemType.IRON_INGOT, ItemType.IRON_INGOT],
+            [null, ItemType.STICK, null],
+            [null, ItemType.STICK, null],
+        ],
+        requiresCraftingTable: true,
+    },
+    // Diamond Pickaxe
+    {
+        result: ItemType.DIAMOND_PICKAXE,
+        count: 1,
+        pattern: [
+            [ItemType.DIAMOND, ItemType.DIAMOND, ItemType.DIAMOND],
+            [null, ItemType.STICK, null],
+            [null, ItemType.STICK, null],
+        ],
+        requiresCraftingTable: true,
+    },
+    // Wooden Axe
+    {
+        result: ItemType.WOODEN_AXE,
+        count: 1,
+        pattern: [
+            [ItemType.PLANKS_BLOCK, ItemType.PLANKS_BLOCK, null],
+            [ItemType.PLANKS_BLOCK, ItemType.STICK, null],
+            [null, ItemType.STICK, null],
+        ],
+        requiresCraftingTable: true,
+    },
+    // Stone Axe
+    {
+        result: ItemType.STONE_AXE,
+        count: 1,
+        pattern: [
+            [ItemType.COBBLESTONE_BLOCK, ItemType.COBBLESTONE_BLOCK, null],
+            [ItemType.COBBLESTONE_BLOCK, ItemType.STICK, null],
+            [null, ItemType.STICK, null],
+        ],
+        requiresCraftingTable: true,
+    },
+    // Iron Axe
+    {
+        result: ItemType.IRON_AXE,
+        count: 1,
+        pattern: [
+            [ItemType.IRON_INGOT, ItemType.IRON_INGOT, null],
+            [ItemType.IRON_INGOT, ItemType.STICK, null],
+            [null, ItemType.STICK, null],
+        ],
+        requiresCraftingTable: true,
+    },
+    // Wooden Sword
+    {
+        result: ItemType.WOODEN_SWORD,
+        count: 1,
+        pattern: [
+            [ItemType.PLANKS_BLOCK, null, null],
+            [ItemType.PLANKS_BLOCK, null, null],
+            [ItemType.STICK, null, null],
+        ],
+        requiresCraftingTable: true,
+    },
+    // Wooden Shovel
+    {
+        result: ItemType.WOODEN_SHOVEL,
+        count: 1,
+        pattern: [
+            [ItemType.PLANKS_BLOCK, null, null],
+            [ItemType.STICK, null, null],
+            [ItemType.STICK, null, null],
+        ],
+        requiresCraftingTable: true,
+    },
+    // Stone Shovel
+    {
+        result: ItemType.STONE_SHOVEL,
+        count: 1,
+        pattern: [
+            [ItemType.COBBLESTONE_BLOCK, null, null],
+            [ItemType.STICK, null, null],
+            [ItemType.STICK, null, null],
+        ],
+        requiresCraftingTable: true,
+    },
+    // Torch
+    {
+        result: ItemType.TORCH_BLOCK,
+        count: 4,
+        pattern: [
+            [ItemType.COAL, null, null],
+            [ItemType.STICK, null, null],
+            [null, null, null],
+        ],
+        requiresCraftingTable: false,
+    },
+    // Furnace
+    {
+        result: ItemType.FURNACE_BLOCK,
+        count: 1,
+        pattern: [
+            [ItemType.COBBLESTONE_BLOCK, ItemType.COBBLESTONE_BLOCK, ItemType.COBBLESTONE_BLOCK],
+            [ItemType.COBBLESTONE_BLOCK, null, ItemType.COBBLESTONE_BLOCK],
+            [ItemType.COBBLESTONE_BLOCK, ItemType.COBBLESTONE_BLOCK, ItemType.COBBLESTONE_BLOCK],
+        ],
+        requiresCraftingTable: true,
+    },
+    // Chest
+    {
+        result: ItemType.CHEST_BLOCK,
+        count: 1,
+        pattern: [
+            [ItemType.PLANKS_BLOCK, ItemType.PLANKS_BLOCK, ItemType.PLANKS_BLOCK],
+            [ItemType.PLANKS_BLOCK, null, ItemType.PLANKS_BLOCK],
+            [ItemType.PLANKS_BLOCK, ItemType.PLANKS_BLOCK, ItemType.PLANKS_BLOCK],
+        ],
+        requiresCraftingTable: true,
+    },
+    // Campfire
+    {
+        result: ItemType.CAMPFIRE_BLOCK,
+        count: 1,
+        pattern: [
+            [ItemType.STICK, ItemType.COAL, ItemType.STICK],
+            [null, ItemType.WOOD_BLOCK, null],
+            [null, ItemType.WOOD_BLOCK, null],
+        ],
+        requiresCraftingTable: true,
+    },
+    // Bed
+    {
+        result: ItemType.BED_BLOCK,
+        count: 1,
+        pattern: [
+            [ItemType.WOOL, ItemType.WOOL, ItemType.WOOL],
+            [ItemType.PLANKS_BLOCK, ItemType.PLANKS_BLOCK, ItemType.PLANKS_BLOCK],
+            [null, null, null],
+        ],
+        requiresCraftingTable: true,
+    },
+    // Tent
+    {
+        result: ItemType.TENT_BLOCK,
+        count: 1,
+        pattern: [
+            [ItemType.WOOL, ItemType.WOOL, ItemType.WOOL],
+            [ItemType.STICK, null, ItemType.STICK],
+            [ItemType.STICK, ItemType.STICK, ItemType.STICK],
+        ],
+        requiresCraftingTable: true,
+    },
+    // Brick
+    {
+        result: ItemType.BRICK_BLOCK,
+        count: 1,
+        pattern: [
+            [ItemType.DIRT_BLOCK, ItemType.DIRT_BLOCK, null],
+            [ItemType.DIRT_BLOCK, ItemType.DIRT_BLOCK, null],
+            [null, null, null],
+        ],
+        requiresCraftingTable: false,
+    },
+    // Glass (smelting sand - simplified as crafting)
+    {
+        result: ItemType.GLASS_BLOCK,
+        count: 1,
+        pattern: [
+            [ItemType.SAND_BLOCK, ItemType.COAL, null],
+            [null, null, null],
+            [null, null, null],
+        ],
+        requiresCraftingTable: false,
+    },
+    // Bread
+    {
+        result: ItemType.BREAD,
+        count: 1,
+        pattern: [
+            [ItemType.WHEAT, ItemType.WHEAT, ItemType.WHEAT],
+            [null, null, null],
+            [null, null, null],
+        ],
+        requiresCraftingTable: true,
+    },
+    // Cake
+    {
+        result: ItemType.CAKE,
+        count: 1,
+        pattern: [
+            [ItemType.WHEAT, ItemType.SUGAR, ItemType.EGG],
+            [ItemType.WHEAT, ItemType.WHEAT, ItemType.WHEAT],
+            [null, null, null],
+        ],
+        requiresCraftingTable: true,
+    },
+    // Mushroom Stew
+    {
+        result: ItemType.MUSHROOM_STEW,
+        count: 1,
+        pattern: [
+            [ItemType.RED_MUSHROOM, ItemType.BROWN_MUSHROOM, null],
+            [null, ItemType.BOWL, null],
+            [null, null, null],
+        ],
+        requiresCraftingTable: false,
+    },
+    // Golden Apple
+    {
+        result: ItemType.GOLDEN_APPLE,
+        count: 1,
+        pattern: [
+            [ItemType.GOLD_INGOT, ItemType.GOLD_INGOT, ItemType.GOLD_INGOT],
+            [ItemType.GOLD_INGOT, ItemType.APPLE, ItemType.GOLD_INGOT],
+            [ItemType.GOLD_INGOT, ItemType.GOLD_INGOT, ItemType.GOLD_INGOT],
+        ],
+        requiresCraftingTable: true,
+    },
+    // Iron Ingot (from Iron Ore + Coal)
+    {
+        result: ItemType.IRON_INGOT,
+        count: 1,
+        pattern: [
+            [ItemType.IRON_ORE_BLOCK, ItemType.COAL, null],
+            [null, null, null],
+            [null, null, null],
+        ],
+        requiresCraftingTable: false,
+    },
+    // Gold Ingot (from Gold Ore + Coal)
+    {
+        result: ItemType.GOLD_INGOT,
+        count: 1,
+        pattern: [
+            [ItemType.GOLD_ORE_BLOCK, ItemType.COAL, null],
+            [null, null, null],
+            [null, null, null],
+        ],
+        requiresCraftingTable: false,
+    },
+    // Bowl
+    {
+        result: ItemType.BOWL,
+        count: 4,
+        pattern: [
+            [ItemType.PLANKS_BLOCK, null, ItemType.PLANKS_BLOCK],
+            [null, ItemType.PLANKS_BLOCK, null],
+            [null, null, null],
+        ],
+        requiresCraftingTable: false,
+    },
+];

@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { InputManager } from './InputManager';
+import { InputManager, GameMode } from './InputManager';
 import { World } from './World';
 import { Player } from './Player';
 import { BlockRaycaster } from './BlockRaycaster';
@@ -36,6 +36,12 @@ export class Game {
     private frameCount: number = 0;
     private ambientLight: THREE.AmbientLight;
     private sunLight: THREE.DirectionalLight;
+
+    // Lock message state
+    private hasEverLocked: boolean = false;
+    private lockMessage: HTMLElement;
+    private crosshair: HTMLElement;
+    private modeIndicator: HTMLElement;
 
     constructor() {
         // Renderer
@@ -118,13 +124,19 @@ export class Game {
         // Highlight mesh for selected block
         this.setupHighlight();
 
+        // UI elements
+        this.lockMessage = document.getElementById('lock-message')!;
+        this.crosshair = document.getElementById('crosshair')!;
+        this.modeIndicator = document.getElementById('mode-indicator')!;
+
         // Resize handler
         window.addEventListener('resize', this.onResize.bind(this));
 
-        // Click to lock pointer
-        const lockMessage = document.getElementById('lock-message')!;
-        lockMessage.addEventListener('click', () => {
-            this.input.requestPointerLock();
+        // Click to lock pointer (initial)
+        this.lockMessage.addEventListener('click', () => {
+            this.input.setGameMode('game');
+            this.hasEverLocked = true;
+            this.updateLockMessage();
         });
 
         // Death respawn
@@ -132,6 +144,10 @@ export class Game {
         deathRespawn.addEventListener('click', () => {
             this.respawn();
         });
+
+        // Start in cursor mode (not game mode) so player sees the lock message
+        this.input.setGameMode('cursor');
+        this.updateLockMessage();
 
         // Start game loop
         this.animate();
@@ -144,6 +160,43 @@ export class Game {
         this.highlightMesh = new THREE.LineSegments(edges, material);
         this.highlightMesh.visible = false;
         this.scene.add(this.highlightMesh);
+    }
+
+    private updateLockMessage(): void {
+        if (this.input.gameMode === 'game') {
+            this.lockMessage.style.display = 'none';
+            this.crosshair.style.display = 'block';
+        } else if (this.input.gameMode === 'cursor') {
+            if (this.hasEverLocked) {
+                this.lockMessage.textContent = 'Click to play | Q: cursor mode | E: inventory';
+                this.lockMessage.style.display = 'block';
+            } else {
+                this.lockMessage.textContent = 'Click to play';
+                this.lockMessage.style.display = 'block';
+            }
+            this.crosshair.style.display = 'none';
+        } else {
+            // UI mode
+            this.lockMessage.style.display = 'none';
+            this.crosshair.style.display = 'none';
+        }
+    }
+
+    private updateModeIndicator(): void {
+        switch (this.input.gameMode) {
+            case 'game':
+                this.modeIndicator.textContent = '🎮 Game Mode';
+                this.modeIndicator.style.display = 'none'; // Hide in game mode
+                break;
+            case 'cursor':
+                this.modeIndicator.textContent = '🖱️ Cursor Mode (Q to return)';
+                this.modeIndicator.style.display = 'block';
+                break;
+            case 'ui':
+                this.modeIndicator.textContent = '📋 UI Mode';
+                this.modeIndicator.style.display = 'block';
+                break;
+        }
     }
 
     private onResize(): void {
@@ -164,6 +217,9 @@ export class Game {
             return;
         }
 
+        // Handle mode switching
+        this.handleModeSwitching();
+
         // Update time system
         this.timeSystem.update(deltaTime);
 
@@ -172,7 +228,7 @@ export class Game {
         this.stats.setDaytime(this.timeSystem.isDaytime());
         this.updatePlayerStats(deltaTime);
 
-        // Update player
+        // Update player (movement + camera rotation in game mode)
         this.player.update(deltaTime);
 
         // Update world (chunk loading)
@@ -180,15 +236,6 @@ export class Game {
 
         // Handle block interaction
         this.handleBlockInteraction();
-
-        // Handle inventory toggle
-        if (this.input.isKeyDown('KeyE')) {
-            this.uiManager.toggleInventory();
-            this.input.keys.delete('KeyE'); // Prevent repeated toggles
-        }
-
-        // Handle crafting table interaction
-        this.handleCraftingTable();
 
         // Update highlight
         this.updateHighlight();
@@ -202,14 +249,57 @@ export class Game {
         this.renderer.render(this.scene, this.camera);
     }
 
+    private handleModeSwitching(): void {
+        // Q key: toggle between game mode and cursor mode
+        if (this.input.isKeyDown('KeyQ')) {
+            this.input.keys.delete('KeyQ');
+            if (this.input.gameMode === 'game') {
+                this.input.setGameMode('cursor');
+            } else if (this.input.gameMode === 'cursor') {
+                this.input.setGameMode('game');
+            }
+            // If in UI mode, Q does nothing (must close UI first)
+            this.updateLockMessage();
+            this.updateModeIndicator();
+        }
+
+        // E key: toggle inventory (UI mode)
+        if (this.input.isKeyDown('KeyE')) {
+            this.input.keys.delete('KeyE');
+            if (this.input.gameMode === 'ui') {
+                // Close inventory, return to previous mode
+                this.uiManager.toggleInventory();
+                this.input.setGameMode('cursor');
+                this.updateLockMessage();
+                this.updateModeIndicator();
+            } else {
+                // Open inventory
+                this.input.setGameMode('ui');
+                this.uiManager.toggleInventory();
+                this.updateLockMessage();
+                this.updateModeIndicator();
+            }
+        }
+
+        // Esc key: return to cursor mode from any mode
+        if (this.input.isKeyDown('Escape')) {
+            this.input.keys.delete('Escape');
+            if (this.input.gameMode === 'ui') {
+                this.uiManager.toggleInventory();
+                this.uiManager.closeCrafting();
+            }
+            this.input.setGameMode('cursor');
+            this.updateLockMessage();
+            this.updateModeIndicator();
+        }
+    }
+
     private updatePlayerStats(deltaTime: number): void {
-        // Check if player is near campfire/furnace/tent
         const playerPos = this.player.position;
         let nearCampfire = false;
         let nearFurnace = false;
         let inTent = false;
 
-        // Simple radius check for nearby blocks
         for (let dx = -5; dx <= 5; dx++) {
             for (let dy = -5; dy <= 5; dy++) {
                 for (let dz = -5; dz <= 5; dz++) {
@@ -236,14 +326,21 @@ export class Game {
         this.stats.setNearFurnace(nearFurnace);
         this.stats.setInTent(inTent);
 
-        // Update stats
         this.stats.update(deltaTime);
     }
 
     private handleBlockInteraction(): void {
-        if (this.uiManager.isUIOpen()) return;
+        // Only allow block interaction in game or cursor mode
+        if (this.input.gameMode === 'ui') return;
 
-        const result = this.raycaster.cast(this.camera);
+        let result;
+        if (this.input.gameMode === 'cursor') {
+            // In cursor mode, use mouse screen position for raycasting
+            result = this.raycaster.cast(this.camera, this.input.cursorX, this.input.cursorY);
+        } else {
+            // In game mode, use camera center
+            result = this.raycaster.cast(this.camera);
+        }
 
         if (this.input.isMouseButtonDown(0)) {
             // Left click - destroy block
@@ -254,13 +351,11 @@ export class Game {
                     result.position.z
                 );
 
-                // Add item to inventory
                 const itemType = BLOCK_TO_ITEM[blockType];
                 if (itemType !== undefined) {
                     this.inventory.addItem(itemType, 1);
                 }
 
-                // Consume EP
                 this.stats.consumeEPForBreak(false);
 
                 this.world.setBlock(
@@ -280,19 +375,20 @@ export class Game {
                 const placeY = result.position.y + result.normal.y;
                 const placeZ = result.position.z + result.normal.z;
 
-                // Check if placing on a crafting table opens crafting UI
                 const targetBlock = this.world.getBlock(
                     result.position.x,
                     result.position.y,
                     result.position.z
                 );
                 if (targetBlock === BlockType.CRAFTING_TABLE) {
+                    this.input.setGameMode('ui');
                     this.uiManager.openCrafting();
+                    this.updateLockMessage();
+                    this.updateModeIndicator();
                     this.input.mouseDown.delete(2);
                     return;
                 }
 
-                // Don't place inside player
                 const playerPos = this.player.position;
                 const playerHeight = 1.8;
                 if (
@@ -303,7 +399,7 @@ export class Game {
                     placeZ >= Math.floor(playerPos.z - 0.3) &&
                     placeZ <= Math.floor(playerPos.z + 0.3)
                 ) {
-                    // Block would be inside player, don't place
+                    // Block would be inside player
                 } else {
                     const selectedItem = this.uiManager.getSelectedItem();
                     if (selectedItem !== null) {
@@ -327,23 +423,20 @@ export class Game {
         }
     }
 
-    private handleCraftingTable(): void {
-        // Check if player right-clicks a crafting table
-        // This is handled in handleBlockInteraction
-    }
-
     private updateHighlight(): void {
-        if (!this.input.isPointerLocked || !this.highlightMesh) {
-            if (this.highlightMesh) this.highlightMesh.visible = false;
-            return;
-        }
+        if (!this.highlightMesh) return;
 
-        if (this.uiManager.isUIOpen()) {
+        if (this.input.gameMode === 'ui') {
             this.highlightMesh.visible = false;
             return;
         }
 
-        const result = this.raycaster.cast(this.camera);
+        let result;
+        if (this.input.gameMode === 'cursor') {
+            result = this.raycaster.cast(this.camera, this.input.cursorX, this.input.cursorY);
+        } else {
+            result = this.raycaster.cast(this.camera);
+        }
         if (result) {
             this.highlightMesh.position.set(
                 result.position.x + 0.5,
@@ -380,6 +473,9 @@ export class Game {
         this.stats.fullHeal();
         this.player.position.set(0, 80, 0);
         this.player.velocity.set(0, 0, 0);
+        this.input.setGameMode('game');
+        this.updateLockMessage();
+        this.updateModeIndicator();
         this.uiManager.hideDeathScreen();
     }
 }

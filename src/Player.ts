@@ -29,8 +29,8 @@ export class Player {
     }
 
     update(deltaTime: number): void {
-        // Mouse look (only when pointer is locked)
-        if (this.input.isPointerLocked) {
+        // Mouse look (only in game mode with pointer locked)
+        if (this.input.gameMode === 'game' && this.input.isPointerLocked) {
             const { dx, dy } = this.input.consumeMouseMovement();
             this.yaw -= dx * this.mouseSensitivity;
             this.pitch -= dy * this.mouseSensitivity;
