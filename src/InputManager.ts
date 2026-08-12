@@ -13,11 +13,15 @@ export class InputManager {
     public cursorX: number = 0.5;
     public cursorY: number = 0.5;
 
+    // Scroll wheel zoom
+    public scrollDelta: number = 0;
+
     private onKeyDown: (e: KeyboardEvent) => void;
     private onKeyUp: (e: KeyboardEvent) => void;
     private onMouseDown: (e: MouseEvent) => void;
     private onMouseUp: (e: MouseEvent) => void;
     private onMouseMove: (e: MouseEvent) => void;
+    private onWheel: (e: WheelEvent) => void;
     private onPointerLockChange: () => void;
     private onContextMenu: (e: Event) => void;
 
@@ -69,12 +73,17 @@ export class InputManager {
             e.preventDefault();
         };
 
+        this.onWheel = (e: WheelEvent) => {
+            this.scrollDelta += e.deltaY;
+        };
+
         document.addEventListener('keydown', this.onKeyDown);
         document.addEventListener('keyup', this.onKeyUp);
         document.addEventListener('mousedown', this.onMouseDown);
         document.addEventListener('mouseup', this.onMouseUp);
         document.addEventListener('mousemove', this.onMouseMove);
         document.addEventListener('pointerlockchange', this.onPointerLockChange);
+        document.addEventListener('wheel', this.onWheel);
         document.addEventListener('contextmenu', this.onContextMenu);
     }
 
@@ -95,6 +104,12 @@ export class InputManager {
         return { dx, dy };
     }
 
+    consumeScrollDelta(): number {
+        const delta = this.scrollDelta;
+        this.scrollDelta = 0;
+        return delta;
+    }
+
     requestPointerLock(): void {
         document.body.requestPointerLock();
     }
@@ -107,6 +122,9 @@ export class InputManager {
 
     setGameMode(mode: GameMode): void {
         this.gameMode = mode;
+
+        // Clear any mouse down states on mode transition to prevent stuck states or accidental actions
+        this.mouseDown.clear();
 
         if (mode === 'game') {
             // Request pointer lock for game mode
@@ -128,6 +146,7 @@ export class InputManager {
         document.removeEventListener('mouseup', this.onMouseUp);
         document.removeEventListener('mousemove', this.onMouseMove);
         document.removeEventListener('pointerlockchange', this.onPointerLockChange);
+        document.removeEventListener('wheel', this.onWheel);
         document.removeEventListener('contextmenu', this.onContextMenu);
     }
 }

@@ -1,0 +1,142 @@
+{
+  "D:\\codedprograms\\game\\mine_craft_homage\\minecaft_homage_ver10\\package.json": {
+    "mtime": 1778940654.6246784,
+    "ast_hash": "e800ff0b95fa355a47ba4ea7674b9166",
+    "semantic_hash": ""
+  },
+  "D:\\codedprograms\\game\\mine_craft_homage\\minecaft_homage_ver10\\test_page.py": {
+    "mtime": 1778982450.8438568,
+    "ast_hash": "f98ea6c079632cebd161dd11b3e6fb1b",
+    "semantic_hash": ""
+  },
+  "D:\\codedprograms\\game\\mine_craft_homage\\minecaft_homage_ver10\\tsconfig.json": {
+    "mtime": 1778940654.6301925,
+    "ast_hash": "5834886ce8a15cde3d29caafa3e4b3e8",
+    "semantic_hash": ""
+  },
+  "D:\\codedprograms\\game\\mine_craft_homage\\minecaft_homage_ver10\\vite.config.ts": {
+    "mtime": 1778940654.6301925,
+    "ast_hash": "5102958f1d15327aaf12b2efc9e460c0",
+    "semantic_hash": ""
+  },
+  "D:\\codedprograms\\game\\mine_craft_homage\\minecaft_homage_ver10\\src\\BlockParticles.ts": {
+    "mtime": 1779019967.580157,
+    "ast_hash": "216669ca50ae435dfc5ae041373b1723",
+    "semantic_hash": ""
+  },
+  "D:\\codedprograms\\game\\mine_craft_homage\\minecaft_homage_ver10\\src\\BlockRaycaster.ts": {
+    "mtime": 1779026269.9730828,
+    "ast_hash": "b634005a5a1415827545853ee1bb63d9",
+    "semantic_hash": ""
+  },
+  "D:\\codedprograms\\game\\mine_craft_homage\\minecaft_homage_ver10\\src\\CharacterModel.ts": {
+    "mtime": 1779276718.805662,
+    "ast_hash": "692750c4b96b3c5b840c9cd372c09fcb",
+    "semantic_hash": ""
+  },
+  "D:\\codedprograms\\game\\mine_craft_homage\\minecaft_homage_ver10\\src\\Chunk.ts": {
+    "mtime": 1778940654.6246784,
+    "ast_hash": "8c410b77fd6774f60cc2de52b9e0afe3",
+    "semantic_hash": ""
+  },
+  "D:\\codedprograms\\game\\mine_craft_homage\\minecaft_homage_ver10\\src\\ChunkMeshBuilder.ts": {
+    "mtime": 1779276716.184053,
+    "ast_hash": "3ff484672d6741b3a9c9373565fd65b3",
+    "semantic_hash": ""
+  },
+  "D:\\codedprograms\\game\\mine_craft_homage\\minecaft_homage_ver10\\src\\constants.ts": {
+    "mtime": 1779276734.516725,
+    "ast_hash": "09cab769474d66f95ea00567fd0b40cf",
+    "semantic_hash": ""
+  },
+  "D:\\codedprograms\\game\\mine_craft_homage\\minecaft_homage_ver10\\src\\Game.ts": {
+    "mtime": 1779276774.0001104,
+    "ast_hash": "5231d5976d95b3a39b17642844b002ff",
+    "semantic_hash": ""
+  },
+  "D:\\codedprograms\\game\\mine_craft_homage\\minecaft_homage_ver10\\src\\InputManager.ts": {
+    "mtime": 1778994389.5189898,
+    "ast_hash": "6726d8408d8635f13cdfe375a1a6223b",
+    "semantic_hash": ""
+  },
+  "D:\\codedprograms\\game\\mine_craft_homage\\minecaft_homage_ver10\\src\\Inventory.ts": {
+    "mtime": 1779118046.8201203,
+    "ast_hash": "29b716ba559e0af911e8515a9a04c22b",
+    "semantic_hash": ""
+  },
+  "D:\\codedprograms\\game\\mine_craft_homage\\minecaft_homage_ver10\\src\\main.ts": {
+    "mtime": 1779004921.008407,
+    "ast_hash": "eac14cab682023477e46597457ee666a",
+    "semantic_hash": ""
+  },
+  "D:\\codedprograms\\game\\mine_craft_homage\\minecaft_homage_ver10\\src\\NoiseGenerator.ts": {
+    "mtime": 1778940654.627185,
+    "ast_hash": "6c7c228bf71fd39f38dbd9d8230cca95",
+    "semantic_hash": ""
+  },
+  "D:\\codedprograms\\game\\mine_craft_homage\\minecaft_homage_ver10\\src\\Player.ts": {
+    "mtime": 1779118403.0819962,
+    "ast_hash": "d6d2ecb3273c7283bed2c8b5ead2656c",
+    "semantic_hash": ""
+  },
+  "D:\\codedprograms\\game\\mine_craft_homage\\minecaft_homage_ver10\\src\\PlayerStats.ts": {
+    "mtime": 1779118568.7507718,
+    "ast_hash": "907d5fe8b19f1e8925011838ab13db31",
+    "semantic_hash": ""
+  },
+  "D:\\codedprograms\\game\\mine_craft_homage\\minecaft_homage_ver10\\src\\TextureAtlas.ts": {
+    "mtime": 1779276701.930024,
+    "ast_hash": "b7f09bd89ccd382274f04d56cc1b6a64",
+    "semantic_hash": ""
+  },
+  "D:\\codedprograms\\game\\mine_craft_homage\\minecaft_homage_ver10\\src\\TimeSystem.ts": {
+    "mtime": 1779118060.287305,
+    "ast_hash": "5cbf98c2a1ead8d4e5449e21db06711e",
+    "semantic_hash": ""
+  },
+  "D:\\codedprograms\\game\\mine_craft_homage\\minecaft_homage_ver10\\src\\types.ts": {
+    "mtime": 1779276171.8350182,
+    "ast_hash": "4a1d96142cb7c098a11cdc7bbf52e0e6",
+    "semantic_hash": ""
+  },
+  "D:\\codedprograms\\game\\mine_craft_homage\\minecaft_homage_ver10\\src\\UIManager.ts": {
+    "mtime": 1779276741.8140428,
+    "ast_hash": "b21c7cb0e6ff239695af9483e1f27a11",
+    "semantic_hash": ""
+  },
+  "D:\\codedprograms\\game\\mine_craft_homage\\minecaft_homage_ver10\\src\\World.ts": {
+    "mtime": 1779118443.7912767,
+    "ast_hash": "9d5f7919db88c10ebc676ee64bc457ad",
+    "semantic_hash": ""
+  },
+  "D:\\codedprograms\\game\\mine_craft_homage\\minecaft_homage_ver10\\agents.md": {
+    "mtime": 1779028038.775563,
+    "ast_hash": "33aeb68afc5c1488810e4129d1563e1e",
+    "semantic_hash": ""
+  },
+  "D:\\codedprograms\\game\\mine_craft_homage\\minecaft_homage_ver10\\Error_Recovery_Targeting.md": {
+    "mtime": 1779028028.5670257,
+    "ast_hash": "30e3acc6d64ca992aacf6e297ba03c7a",
+    "semantic_hash": ""
+  },
+  "D:\\codedprograms\\game\\mine_craft_homage\\minecaft_homage_ver10\\index.html": {
+    "mtime": 1779276060.8672726,
+    "ast_hash": "17ea56f9347a78d90c09281365170248",
+    "semantic_hash": ""
+  },
+  "D:\\codedprograms\\game\\mine_craft_homage\\minecaft_homage_ver10\\.agents\\rules\\graphify.md": {
+    "mtime": 1779272047.4029922,
+    "ast_hash": "a0e4d192b9e2e17256124dbfc8e24e6a",
+    "semantic_hash": ""
+  },
+  "D:\\codedprograms\\game\\mine_craft_homage\\minecaft_homage_ver10\\.agents\\workflows\\graphify.md": {
+    "mtime": 1779272047.403993,
+    "ast_hash": "84de69efd46ab0b8430393bd4188f8f2",
+    "semantic_hash": ""
+  },
+  "D:\\codedprograms\\game\\mine_craft_homage\\minecaft_homage_ver10\\screenshot.png": {
+    "mtime": 1778982502.1485884,
+    "ast_hash": "723aecab3f85f60e15649566555f6fbd",
+    "semantic_hash": ""
+  }
+}

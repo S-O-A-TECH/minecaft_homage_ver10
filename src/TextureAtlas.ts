@@ -38,6 +38,12 @@ export class TextureAtlas {
         this.drawBrick(2, 1);
         this.drawGlass(3, 1);
         this.drawSnow(4, 1);
+        this.drawCraftingTableTop(5, 1);
+        this.drawCraftingTableSide(6, 1);
+        this.drawFire(7, 1);
+        this.drawWater(0, 2);
+        this.drawLava(1, 2);
+        this.drawGravel(2, 2);
     }
 
     private fillRect(x: number, y: number, color: string): void {
@@ -155,12 +161,32 @@ export class TextureAtlas {
     private drawPlanks(col: number, row: number): void {
         const px = col * TILE_SIZE;
         const py = row * TILE_SIZE;
+        // Base wood color
         this.ctx.fillStyle = '#BC8F4F';
         this.ctx.fillRect(px, py, TILE_SIZE, TILE_SIZE);
+        
+        // Draw 4 separate planks (rows)
         for (let i = 0; i < 4; i++) {
-            const py2 = py + i * 4;
-            this.ctx.fillStyle = `rgb(${170 + Math.random() * 20},${130 + Math.random() * 20},${70 + Math.random() * 15})`;
-            this.ctx.fillRect(px, py2, TILE_SIZE, 3);
+            const rowY = py + i * 4;
+            // Draw plank body with light grain variation
+            this.ctx.fillStyle = `rgb(${180 + Math.random() * 15}, ${135 + Math.random() * 15}, ${75 + Math.random() * 10})`;
+            this.ctx.fillRect(px, rowY, TILE_SIZE, 3);
+            
+            // Draw staggered vertical joint lines to look like actual floorboard planks (마루)
+            this.ctx.fillStyle = '#5C3A21'; // Dark wood border color
+            // Stagger joints: Row 0/2 have joint at middle (x=8), Row 1/3 have joints at x=4 and x=12
+            if (i % 2 === 0) {
+                this.ctx.fillRect(px + 8, rowY, 1, 3);
+            } else {
+                this.ctx.fillRect(px + 4, rowY, 1, 3);
+                this.ctx.fillRect(px + 12, rowY, 1, 3);
+            }
+        }
+        
+        // Draw horizontal grooves (plank borders)
+        this.ctx.fillStyle = '#5C3A21'; // Dark wood border color
+        for (let i = 0; i < 4; i++) {
+            this.ctx.fillRect(px, py + i * 4 + 3, TILE_SIZE, 1);
         }
     }
 
@@ -208,6 +234,58 @@ export class TextureAtlas {
         this.addNoise(col, row, '#F0F5F9', 5);
     }
 
+    private drawCraftingTableTop(col: number, row: number): void {
+        const px = col * TILE_SIZE;
+        const py = row * TILE_SIZE;
+        this.ctx.fillStyle = '#C68E46'; // Wood base
+        this.ctx.fillRect(px, py, TILE_SIZE, TILE_SIZE);
+        
+        // Draw 3x3 grid
+        this.ctx.strokeStyle = '#8B5A2B';
+        this.ctx.lineWidth = 1;
+        this.ctx.beginPath();
+        for (let i = 1; i < 3; i++) {
+            const offset = (TILE_SIZE / 3) * i;
+            this.ctx.moveTo(px + offset, py);
+            this.ctx.lineTo(px + offset, py + TILE_SIZE);
+            this.ctx.moveTo(px, py + offset);
+            this.ctx.lineTo(px + TILE_SIZE, py + offset);
+        }
+        this.ctx.stroke();
+    }
+
+    private drawCraftingTableSide(col: number, row: number): void {
+        const px = col * TILE_SIZE;
+        const py = row * TILE_SIZE;
+        
+        // Base backing (inside shadow under the table top)
+        this.ctx.fillStyle = '#503319'; // Very dark brown background shadow
+        this.ctx.fillRect(px, py, TILE_SIZE, TILE_SIZE);
+        
+        // Table top surface trim (wood tabletop edge)
+        this.ctx.fillStyle = '#C68E46'; // Warm table wood color
+        this.ctx.fillRect(px, py, TILE_SIZE, 4);
+        
+        // Drawer front or front crossbeam panel
+        this.ctx.fillStyle = '#8B5A2B'; // Drawer wood panel
+        this.ctx.fillRect(px + 2, py + 4, TILE_SIZE - 4, 3);
+        
+        // Drawer tiny gold handle
+        this.ctx.fillStyle = '#FFD700';
+        this.ctx.fillRect(px + 7, py + 5, 2, 1);
+        
+        // Left Leg (thick wood leg at left)
+        this.ctx.fillStyle = '#8B5A2B'; 
+        this.ctx.fillRect(px, py + 4, 3, TILE_SIZE - 4);
+        
+        // Right Leg (thick wood leg at right)
+        this.ctx.fillRect(px + TILE_SIZE - 3, py + 4, 3, TILE_SIZE - 4);
+        
+        // Lower shelf / crossbeam (table leg connector)
+        this.ctx.fillStyle = '#6F4723';
+        this.ctx.fillRect(px + 3, py + TILE_SIZE - 4, TILE_SIZE - 6, 2);
+    }
+
     getUV(blockType: BlockType, face: number): [number, number, number, number] {
         let col = 0;
         let row = 0;
@@ -231,6 +309,13 @@ export class TextureAtlas {
             case BlockType.BRICK: col = 2; row = 1; break;
             case BlockType.GLASS: col = 3; row = 1; break;
             case BlockType.SNOW: col = 4; row = 1; break;
+            case BlockType.FURNACE:
+            case BlockType.CAMPFIRE:
+            case BlockType.TORCH:
+                col = 7; row = 1; break; // Fire texture col=7, row=1
+            case BlockType.WATER: col = 0; row = 2; break;
+            case BlockType.LAVA: col = 1; row = 2; break;
+            case BlockType.GRAVEL: col = 2; row = 2; break;
             default: col = 2; row = 0; break;
         }
 
@@ -238,5 +323,82 @@ export class TextureAtlas {
         const v = 1.0 - (row + 1) / ATLAS_COLS; // Flip Y for OpenGL UV
         const uvSize = 1 / ATLAS_COLS;
         return [u, v, u + uvSize, v + uvSize];
+    }
+
+    private drawFire(col: number, row: number): void {
+        const px = col * TILE_SIZE;
+        const py = row * TILE_SIZE;
+        
+        // Clear to transparent black
+        this.ctx.clearRect(px, py, TILE_SIZE, TILE_SIZE);
+
+        // Fill with a deep dark coal-black fire pit base line at the bottom
+        this.ctx.fillStyle = '#1a1a1a';
+        this.ctx.fillRect(px, py + TILE_SIZE - 2, TILE_SIZE, 2);
+
+        // Draw animated fire textures
+        for (let y = 0; y < TILE_SIZE - 2; y++) {
+            for (let x = 0; x < TILE_SIZE; x++) {
+                const dx = Math.abs(x - TILE_SIZE / 2);
+                const heightFactor = (TILE_SIZE - y) / TILE_SIZE;
+                const widthLimit = TILE_SIZE * 0.45 * heightFactor;
+
+                if (dx <= widthLimit + (Math.random() - 0.5) * 1.5) {
+                    const r = dx / (widthLimit + 0.1);
+                    if (r < 0.25) {
+                        this.ctx.fillStyle = '#ffffff'; // hot white center core
+                    } else if (r < 0.5) {
+                        this.ctx.fillStyle = '#f1c40f'; // bright yellow
+                    } else if (r < 0.75) {
+                        this.ctx.fillStyle = '#e67e22'; // bright orange
+                    } else {
+                        this.ctx.fillStyle = '#e74c3c'; // red edge
+                    }
+                    this.ctx.fillRect(px + x, py + y, 1, 1);
+                }
+            }
+        }
+    }
+
+    private drawWater(col: number, row: number): void {
+        const px = col * TILE_SIZE;
+        const py = row * TILE_SIZE;
+        this.ctx.fillStyle = '#3498db'; // Nice water blue
+        this.ctx.fillRect(px, py, TILE_SIZE, TILE_SIZE);
+        for (let i = 0; i < 20; i++) {
+            const wx = px + Math.random() * TILE_SIZE;
+            const wy = py + Math.random() * TILE_SIZE;
+            const blueShade = 200 + Math.random() * 55;
+            this.ctx.fillStyle = `rgba(100, 180, ${blueShade}, 0.5)`;
+            this.ctx.fillRect(wx, wy, 2 + Math.random() * 2, 2 + Math.random() * 2);
+        }
+    }
+
+    private drawLava(col: number, row: number): void {
+        const px = col * TILE_SIZE;
+        const py = row * TILE_SIZE;
+        this.ctx.fillStyle = '#e67e22'; // Orange lava
+        this.ctx.fillRect(px, py, TILE_SIZE, TILE_SIZE);
+        for (let i = 0; i < 20; i++) {
+            const lx = px + Math.random() * TILE_SIZE;
+            const ly = py + Math.random() * TILE_SIZE;
+            const redOrYellow = Math.random() > 0.5 ? '#d35400' : '#f1c40f';
+            this.ctx.fillStyle = redOrYellow;
+            this.ctx.fillRect(lx, ly, 2 + Math.random() * 2, 2 + Math.random() * 2);
+        }
+    }
+
+    private drawGravel(col: number, row: number): void {
+        const px = col * TILE_SIZE;
+        const py = row * TILE_SIZE;
+        this.ctx.fillStyle = '#7f8c8d'; // Grey gravel base
+        this.ctx.fillRect(px, py, TILE_SIZE, TILE_SIZE);
+        for (let i = 0; i < 30; i++) {
+            const gx = px + Math.random() * TILE_SIZE;
+            const gy = py + Math.random() * TILE_SIZE;
+            const shade = 80 + Math.random() * 50;
+            this.ctx.fillStyle = `rgb(${shade}, ${shade}, ${shade})`;
+            this.ctx.fillRect(gx, gy, 1 + Math.random() * 2, 1 + Math.random() * 2);
+        }
     }
 }

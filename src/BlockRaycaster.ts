@@ -11,92 +11,53 @@ export class BlockRaycaster {
     }
 
     cast(camera: THREE.PerspectiveCamera, screenX?: number, screenY?: number): RaycastResult | null {
-        let direction: THREE.Vector3;
-        let origin: THREE.Vector3;
+        const raycaster = new THREE.Raycaster();
+        raycaster.far = CONFIG.reachDistance;
 
         if (screenX !== undefined && screenY !== undefined) {
             // Use screen coordinates (for cursor mode)
-            // Convert normalized screen coords (0-1) to NDC (-1 to 1)
             const ndc = new THREE.Vector2(
                 screenX * 2 - 1,
                 -(screenY * 2 - 1)
             );
-
-            const raycaster = new THREE.Raycaster();
             raycaster.setFromCamera(ndc, camera);
-            direction = raycaster.ray.direction.clone();
-            origin = raycaster.ray.origin.clone();
         } else {
             // Use camera center (for game mode)
-            direction = new THREE.Vector3(0, 0, -1).applyQuaternion(camera.quaternion);
-            direction.normalize();
-            origin = camera.position.clone();
+            raycaster.setFromCamera(new THREE.Vector2(0, 0), camera);
         }
-        const maxDistance = CONFIG.reachDistance;
-        const step = 0.05;
 
-        let distance = 0;
-        let lastBlockPos: THREE.Vector3 | null = null;
+        const meshes = this.world.getChunkMeshes();
+        const intersects = raycaster.intersectObjects(meshes, false);
 
-        while (distance < maxDistance) {
-            const point = origin.clone().add(direction.clone().multiplyScalar(distance));
-            const blockX = Math.floor(point.x);
-            const blockY = Math.floor(point.y);
-            const blockZ = Math.floor(point.z);
+        if (intersects.length > 0) {
+            const hit = intersects[0];
+            
+            // Push the hit point inward by exactly half a block 
+            // to ensure Math.floor absolutely resolves to the center of the solid block.
+            const blockX = Math.floor(hit.point.x - hit.face!.normal.x * 0.5);
+            const blockY = Math.floor(hit.point.y - hit.face!.normal.y * 0.5);
+            const blockZ = Math.floor(hit.point.z - hit.face!.normal.z * 0.5);
 
-            const block = this.world.getBlock(blockX, blockY, blockZ);
+            const face = this.getFaceFromNormal(hit.face!.normal);
 
-            if (block !== BlockType.AIR) {
-                // Found a block - calculate which face was hit
-                const face = this.calculateFace(point, blockX, blockY, blockZ);
-                const normal = this.getFaceNormal(face);
-
-                return {
-                    position: { x: blockX, y: blockY, z: blockZ },
-                    face,
-                    normal: { x: normal[0], y: normal[1], z: normal[2] },
-                    distance,
-                };
-            }
-
-            lastBlockPos = new THREE.Vector3(blockX, blockY, blockZ);
-            distance += step;
+            return {
+                position: { x: blockX, y: blockY, z: blockZ },
+                face,
+                normal: { x: hit.face!.normal.x, y: hit.face!.normal.y, z: hit.face!.normal.z },
+                distance: hit.distance,
+                exactHitPoint: hit.point,
+            };
         }
 
         return null;
     }
 
-    private calculateFace(point: THREE.Vector3, bx: number, by: number, bz: number): BlockFace {
-        const dx = point.x - bx;
-        const dy = point.y - by;
-        const dz = point.z - bz;
-
-        // Calculate distances to each face
-        const distTop = 1 - dy;
-        const distBottom = dy;
-        const distNorth = dz;
-        const distSouth = 1 - dz;
-        const distEast = 1 - dx;
-        const distWest = dx;
-
-        const minDist = Math.min(distTop, distBottom, distNorth, distSouth, distEast, distWest);
-
-        if (minDist === distTop) return BlockFace.TOP;
-        if (minDist === distBottom) return BlockFace.BOTTOM;
-        if (minDist === distNorth) return BlockFace.NORTH;
-        if (minDist === distSouth) return BlockFace.SOUTH;
-        if (minDist === distEast) return BlockFace.EAST;
+    private getFaceFromNormal(normal: THREE.Vector3): BlockFace {
+        if (normal.y > 0.5) return BlockFace.TOP;
+        if (normal.y < -0.5) return BlockFace.BOTTOM;
+        if (normal.z < -0.5) return BlockFace.NORTH;
+        if (normal.z > 0.5) return BlockFace.SOUTH;
+        if (normal.x > 0.5) return BlockFace.EAST;
         return BlockFace.WEST;
-    }
-
-    private getFaceNormal(face: BlockFace): [number, number, number] {
-        switch (face) {
-            case BlockFace.TOP: return [0, 1, 0];
-            case BlockFace.BOTTOM: return [0, -1, 0];
-            case BlockFace.NORTH: return [0, 0, -1];
-            case BlockFace.SOUTH: return [0, 0, 1];
-            case BlockFace.EAST: return [1, 0, 0];
-            case BlockFace.WEST: return [-1, 0, 0];
-        }
     }
 }

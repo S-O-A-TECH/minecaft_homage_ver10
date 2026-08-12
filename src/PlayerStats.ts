@@ -35,6 +35,8 @@ export class PlayerStats {
     public maxEp: number;
     public hunger: number;
     public maxHunger: number;
+    public saturation: number = 20.0;
+    private rapidRegenTimer: number = 0;
 
     private isSprinting: boolean = false;
     private isSwimming: boolean = false;
@@ -54,6 +56,7 @@ export class PlayerStats {
         this.maxEp = 100;
         this.hunger = 100;
         this.maxHunger = 100;
+        this.saturation = 50.0;
     }
 
     clamp(value: number, min: number, max: number): number {
@@ -72,7 +75,13 @@ export class PlayerStats {
             hungerDecay += HUNGER_DECAY_JUMP;
             this.justJumped = false;
         }
-        this.hunger = this.clamp(this.hunger - hungerDecay, 0, this.maxHunger);
+
+        // Intercept hunger decay using saturation first
+        if (this.saturation > 0) {
+            this.saturation = Math.max(0, this.saturation - hungerDecay);
+        } else {
+            this.hunger = this.clamp(this.hunger - hungerDecay, 0, this.maxHunger);
+        }
 
         // === STARVATION DAMAGE ===
         if (this.hunger <= 0) {
@@ -106,7 +115,24 @@ export class PlayerStats {
             if (this.isNearFurnace) hpRegen += HP_REGEN_FURNACE * dt;
             this.hp = this.clamp(this.hp + hpRegen, 0, this.maxHp);
             // Extra hunger decay while healing
-            this.hunger = this.clamp(this.hunger - HUNGER_DECAY_HEALING * dt, 0, this.maxHunger);
+            const extraDecay = HUNGER_DECAY_HEALING * dt;
+            if (this.saturation > 0) {
+                this.saturation = Math.max(0, this.saturation - extraDecay);
+            } else {
+                this.hunger = this.clamp(this.hunger - extraDecay, 0, this.maxHunger);
+            }
+        }
+
+        // === RAPID REGENERATION (Phase 3 Spec) ===
+        if (this.hunger >= 90 && this.saturation > 0) {
+            this.rapidRegenTimer += dt;
+            if (this.rapidRegenTimer >= 1.0) {
+                this.hp = this.clamp(this.hp + 10.0, 0, this.maxHp);
+                this.saturation = Math.max(0, this.saturation - 20.0);
+                this.rapidRegenTimer = 0;
+            }
+        } else {
+            this.rapidRegenTimer = 0;
         }
     }
 
@@ -168,6 +194,15 @@ export class PlayerStats {
         this.hunger = this.clamp(this.hunger + food.hungerRestore, 0, this.maxHunger);
         this.hp = this.clamp(this.hp + food.hpRestore, 0, this.maxHp);
         this.ep = this.clamp(this.ep + food.epRestore, 0, this.maxEp);
+
+        // Calculate saturation restore: hungerRestore * modifier * 2
+        let modifier = 0.6; // default for apple
+        if (itemType === ItemType.BAKED_APPLE) {
+            modifier = 1.2;
+        }
+        const satGain = food.hungerRestore * modifier * 2.0;
+        this.saturation = this.clamp(this.saturation + satGain, 0, this.hunger); // Clamped by current hunger
+
         return true;
     }
 
@@ -198,7 +233,7 @@ export class PlayerStats {
         return this.hp <= 0;
     }
 
-    getData(): PlayerStatsData {
+    getState(): PlayerStatsData {
         return {
             hp: this.hp,
             maxHp: this.maxHp,
@@ -206,6 +241,17 @@ export class PlayerStats {
             maxEp: this.maxEp,
             hunger: this.hunger,
             maxHunger: this.maxHunger,
+            saturation: this.saturation
         };
+    }
+
+    setState(data: PlayerStatsData): void {
+        this.hp = data.hp;
+        this.maxHp = data.maxHp;
+        this.ep = data.ep;
+        this.maxEp = data.maxEp;
+        this.hunger = data.hunger;
+        this.maxHunger = data.maxHunger;
+        this.saturation = data.saturation !== undefined ? data.saturation : 50.0;
     }
 }

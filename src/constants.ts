@@ -8,7 +8,7 @@ export const CONFIG: GameConfig = {
     gravity: 20,
     playerHeight: 1.6,
     playerSpeed: 8,
-    reachDistance: 6,
+    reachDistance: 4,
 };
 
 export const CHUNK_SIZE = CONFIG.chunkSize;
@@ -16,100 +16,95 @@ export const WORLD_HEIGHT = CONFIG.worldHeight;
 export const CHUNK_VOLUME = CHUNK_SIZE * WORLD_HEIGHT * CHUNK_SIZE;
 
 export const BLOCK_NAMES: Record<BlockType, string> = {
-    [BlockType.AIR]: 'Air',
-    [BlockType.GRASS]: 'Grass',
-    [BlockType.DIRT]: 'Dirt',
-    [BlockType.STONE]: 'Stone',
-    [BlockType.WOOD]: 'Wood',
-    [BlockType.LEAVES]: 'Leaves',
-    [BlockType.SAND]: 'Sand',
-    [BlockType.WATER]: 'Water',
-    [BlockType.PLANKS]: 'Planks',
-    [BlockType.COBBLESTONE]: 'Cobblestone',
-    [BlockType.BRICK]: 'Brick',
-    [BlockType.GLASS]: 'Glass',
-    [BlockType.SNOW]: 'Snow',
-    [BlockType.CAMPFIRE]: 'Campfire',
-    [BlockType.TENT]: 'Tent',
-    [BlockType.BED]: 'Bed',
-    [BlockType.FURNACE]: 'Furnace',
-    [BlockType.CRAFTING_TABLE]: 'Crafting Table',
-    [BlockType.CHEST]: 'Chest',
-    [BlockType.TORCH]: 'Torch',
-    [BlockType.COAL_ORE]: 'Coal Ore',
-    [BlockType.IRON_ORE]: 'Iron Ore',
-    [BlockType.GOLD_ORE]: 'Gold Ore',
-    [BlockType.DIAMOND_ORE]: 'Diamond Ore',
-    [BlockType.SANDSTONE]: 'Sandstone',
-    [BlockType.ICE]: 'Ice',
-    [BlockType.CACTUS]: 'Cactus',
-    [BlockType.GRAVEL]: 'Gravel',
+    [BlockType.AIR]: '공기',
+    [BlockType.GRASS]: '잔디',
+    [BlockType.DIRT]: '흙',
+    [BlockType.STONE]: '돌',
+    [BlockType.WOOD]: '원목',
+    [BlockType.LEAVES]: '나뭇잎',
+    [BlockType.SAND]: '모래',
+    [BlockType.WATER]: '물',
+    [BlockType.PLANKS]: '판자',
+    [BlockType.COBBLESTONE]: '조약돌',
+    [BlockType.BRICK]: '벽돌',
+    [BlockType.GLASS]: '유리',
+    [BlockType.SNOW]: '눈',
+    [BlockType.CAMPFIRE]: '모닥불',
+    [BlockType.TENT]: '텐트',
+    [BlockType.BED]: '침대',
+    [BlockType.FURNACE]: '화롯불',
+    [BlockType.CHEST]: '상자',
+    [BlockType.TORCH]: '횃불',
+    [BlockType.COAL_ORE]: '석탄 광석',
+    [BlockType.IRON_ORE]: '철 광석',
+    [BlockType.GOLD_ORE]: '금 광석',
+    [BlockType.DIAMOND_ORE]: '다이아몬드 광석',
+    [BlockType.SANDSTONE]: '사암',
+    [BlockType.ICE]: '얼음',
+    [BlockType.CACTUS]: '선인장',
+    [BlockType.GRAVEL]: '자갈',
+    [BlockType.LAVA]: '용암',
 };
 
 export const ITEM_NAMES: Record<ItemType, string> = {
-    [ItemType.GRASS_BLOCK]: 'Grass Block',
-    [ItemType.DIRT_BLOCK]: 'Dirt',
-    [ItemType.STONE_BLOCK]: 'Stone',
-    [ItemType.WOOD_BLOCK]: 'Wood',
-    [ItemType.LEAVES_BLOCK]: 'Leaves',
-    [ItemType.SAND_BLOCK]: 'Sand',
-    [ItemType.PLANKS_BLOCK]: 'Planks',
-    [ItemType.COBBLESTONE_BLOCK]: 'Cobblestone',
-    [ItemType.BRICK_BLOCK]: 'Brick',
-    [ItemType.GLASS_BLOCK]: 'Glass',
-    [ItemType.SNOW_BLOCK]: 'Snow',
-    [ItemType.CAMPFIRE_BLOCK]: 'Campfire',
-    [ItemType.TENT_BLOCK]: 'Tent',
-    [ItemType.BED_BLOCK]: 'Bed',
-    [ItemType.FURNACE_BLOCK]: 'Furnace',
-    [ItemType.CRAFTING_TABLE_BLOCK]: 'Crafting Table',
-    [ItemType.CHEST_BLOCK]: 'Chest',
-    [ItemType.TORCH_BLOCK]: 'Torch',
-    [ItemType.COAL_ORE_BLOCK]: 'Coal Ore',
-    [ItemType.IRON_ORE_BLOCK]: 'Iron Ore',
-    [ItemType.GOLD_ORE_BLOCK]: 'Gold Ore',
-    [ItemType.DIAMOND_ORE_BLOCK]: 'Diamond Ore',
-    [ItemType.SANDSTONE_BLOCK]: 'Sandstone',
-    [ItemType.ICE_BLOCK]: 'Ice',
-    [ItemType.CACTUS_BLOCK]: 'Cactus',
-    [ItemType.GRAVEL_BLOCK]: 'Gravel',
-    [ItemType.WOODEN_PICKAXE]: 'Wooden Pickaxe',
-    [ItemType.STONE_PICKAXE]: 'Stone Pickaxe',
-    [ItemType.IRON_PICKAXE]: 'Iron Pickaxe',
-    [ItemType.DIAMOND_PICKAXE]: 'Diamond Pickaxe',
-    [ItemType.WOODEN_AXE]: 'Wooden Axe',
-    [ItemType.STONE_AXE]: 'Stone Axe',
-    [ItemType.IRON_AXE]: 'Iron Axe',
-    [ItemType.WOODEN_SHOVEL]: 'Wooden Shovel',
-    [ItemType.STONE_SHOVEL]: 'Stone Shovel',
-    [ItemType.WOODEN_SWORD]: 'Wooden Sword',
-    [ItemType.APPLE]: 'Apple',
-    [ItemType.BREAD]: 'Bread',
-    [ItemType.RAW_BEEF]: 'Raw Beef',
-    [ItemType.STEAK]: 'Steak',
-    [ItemType.RAW_CHICKEN]: 'Raw Chicken',
-    [ItemType.COOKED_CHICKEN]: 'Cooked Chicken',
-    [ItemType.CARROT]: 'Carrot',
-    [ItemType.BAKED_POTATO]: 'Baked Potato',
-    [ItemType.MUSHROOM_STEW]: 'Mushroom Stew',
-    [ItemType.CAKE]: 'Cake',
-    [ItemType.GOLDEN_APPLE]: 'Golden Apple',
-    [ItemType.STICK]: 'Stick',
-    [ItemType.COAL]: 'Coal',
-    [ItemType.IRON_INGOT]: 'Iron Ingot',
-    [ItemType.GOLD_INGOT]: 'Gold Ingot',
-    [ItemType.DIAMOND]: 'Diamond',
-    [ItemType.STRING]: 'String',
-    [ItemType.FEATHER]: 'Feather',
-    [ItemType.LEATHER]: 'Leather',
-    [ItemType.BOWL]: 'Bowl',
-    [ItemType.WOOL]: 'Wool',
-    [ItemType.SUGAR]: 'Sugar',
-    [ItemType.EGG]: 'Egg',
-    [ItemType.WHEAT]: 'Wheat',
-    [ItemType.POTATO]: 'Potato',
-    [ItemType.RED_MUSHROOM]: 'Red Mushroom',
-    [ItemType.BROWN_MUSHROOM]: 'Brown Mushroom',
+    [ItemType.DIRT_BLOCK]: '흙 블록',
+    [ItemType.STONE_BLOCK]: '돌 블록',
+    [ItemType.WOOD_BLOCK]: '원목',
+    [ItemType.PLANKS_BLOCK]: '판자',
+    [ItemType.COBBLESTONE_BLOCK]: '조약돌 블록',
+    [ItemType.FURNACE_BLOCK]: '화롯불',
+    [ItemType.CAMPFIRE_BLOCK]: '모닥불',
+    [ItemType.TORCH_BLOCK]: '횃불',
+
+    [ItemType.WOODEN_PICKAXE]: '나무 곡괭이',
+    [ItemType.STONE_PICKAXE]: '돌 곡괭이',
+    [ItemType.IRON_PICKAXE]: '철 곡괭이',
+    [ItemType.DIAMOND_PICKAXE]: '다이아몬드 곡괭이',
+    [ItemType.WOODEN_SWORD]: '나무 검',
+    [ItemType.STONE_SWORD]: '돌 검',
+    [ItemType.IRON_SWORD]: '철 검',
+    [ItemType.DIAMOND_SWORD]: '다이아몬드 검',
+
+    [ItemType.APPLE]: '사과',
+    [ItemType.BAKED_APPLE]: '구운사과',
+
+    [ItemType.STICK]: '막대기',
+    [ItemType.COAL]: '석탄',
+    [ItemType.IRON_INGOT]: '철 주괴',
+    [ItemType.GOLD_INGOT]: '금 주괴',
+    [ItemType.DIAMOND]: '다이아몬드',
+    [ItemType.EMERALD]: '에메랄드',
+};
+
+export const ITEM_DESCRIPTIONS: Record<ItemType, string> = {
+    [ItemType.DIRT_BLOCK]: '흙 블록입니다. 지형을 채우거나 건축에 사용됩니다.',
+    [ItemType.STONE_BLOCK]: '단단한 천연 돌 블록입니다.',
+    [ItemType.WOOD_BLOCK]: '가공되지 않은 통나무 원목입니다. 판자나 막대기로 가공할 수 있습니다.',
+    [ItemType.PLANKS_BLOCK]: '나무 판자입니다. 건축 및 도구 제작의 핵심 기초 재료입니다.',
+    [ItemType.COBBLESTONE_BLOCK]: '거친 조약돌 블록입니다. 화로나 고급 도구 제작에 필수적입니다.',
+    [ItemType.FURNACE_BLOCK]: '블록 배치 후 우클릭하여 사과를 구운 사과로 요리할 수 있는 화롯불입니다.',
+    [ItemType.CAMPFIRE_BLOCK]: '주변을 밝히고 따뜻한 온기를 전해주는 모닥불입니다.',
+    [ItemType.TORCH_BLOCK]: '어두운 곳을 환하게 밝혀주며, 주변의 적대적 몹 스폰을 방지하는 횃불입니다.',
+
+    [ItemType.WOODEN_PICKAXE]: '나무 곡괭이입니다. [기능] 돌과 조약돌 복셀을 채굴하고 수확할 수 있습니다.',
+    [ItemType.STONE_PICKAXE]: '돌 곡괭이입니다. [기능] 돌 채굴 속도가 빠르며, 철 광석을 수확할 수 있습니다.',
+    [ItemType.IRON_PICKAXE]: '철 곡괭이입니다. [기능] 금과 다이아몬드 광석을 온전하게 캐내어 수확할 수 있습니다.',
+    [ItemType.DIAMOND_PICKAXE]: '다이아몬드 곡괭이입니다. [기능] 가장 단단하며 최고 배율의 채굴 속도를 제공합니다.',
+
+    [ItemType.WOODEN_SWORD]: '나무 검입니다. [기능] 적에게 근접 물리 타격을 입힙니다. (공격 피해량: 4)',
+    [ItemType.STONE_SWORD]: '돌 검입니다. [기능] 돌날을 갈아 다듬어 보다 치명적인 타격력을 지닙니다. (공격 피해량: 5)',
+    [ItemType.IRON_SWORD]: '철 검입니다. [기능] 날카롭게 제련된 철 검신으로 무시무시한 피해를 줍니다. (공격 피해량: 6)',
+    [ItemType.DIAMOND_SWORD]: '다이아몬드 검입니다. [기능] 최강의 검신과 물리 넉백 계수를 보유한 무기입니다. (공격 피해량: 7)',
+
+    [ItemType.APPLE]: '갓 수확한 사과입니다. [기능] 단독 섭취 시 허기 20, 체력 10, 기력 20을 즉시 보충합니다.',
+    [ItemType.BAKED_APPLE]: '화로에서 노릇하게 요리된 사과입니다. [기능] 섭취 시 허기 40, 체력 20, 기력 40을 회복합니다.',
+
+    [ItemType.STICK]: '가늘고 단단한 막대기입니다. 곡괭이, 검, 횃불 등 도구 손잡이용 재료입니다.',
+    [ItemType.COAL]: '화력 연료 석탄입니다. 횃불 제작 시 막대기와 결합하여 쓰입니다.',
+    [ItemType.IRON_INGOT]: '단단히 제련된 철 주괴입니다. 철 도구 및 주요 물리 장비의 골격 재료입니다.',
+    [ItemType.GOLD_INGOT]: '빛나는 금 주괴입니다. 주민 상점 거래 시 에메랄드를 수확하는 화폐로 유용합니다.',
+    [ItemType.DIAMOND]: '지하 깊은 곳에서 채굴한 다이아몬드 보석입니다. 최고 성능 도구의 핵심 부품입니다.',
+    [ItemType.EMERALD]: '주민 무역에 사용되는 보석 화폐입니다. 주민 우클릭 거래 창에서 지불 수단으로 쓰입니다.',
 };
 
 // BlockType -> ItemType mapping for drops
@@ -118,84 +113,42 @@ export const BLOCK_TO_ITEM: Partial<Record<BlockType, ItemType>> = {
     [BlockType.DIRT]: ItemType.DIRT_BLOCK,
     [BlockType.STONE]: ItemType.COBBLESTONE_BLOCK,
     [BlockType.WOOD]: ItemType.WOOD_BLOCK,
-    [BlockType.LEAVES]: ItemType.LEAVES_BLOCK,
-    [BlockType.SAND]: ItemType.SAND_BLOCK,
+    [BlockType.LEAVES]: ItemType.DIRT_BLOCK,
+    [BlockType.SAND]: ItemType.DIRT_BLOCK,
     [BlockType.PLANKS]: ItemType.PLANKS_BLOCK,
     [BlockType.COBBLESTONE]: ItemType.COBBLESTONE_BLOCK,
-    [BlockType.BRICK]: ItemType.BRICK_BLOCK,
-    [BlockType.GLASS]: ItemType.GLASS_BLOCK,
-    [BlockType.SNOW]: ItemType.SNOW_BLOCK,
     [BlockType.CAMPFIRE]: ItemType.CAMPFIRE_BLOCK,
-    [BlockType.TENT]: ItemType.TENT_BLOCK,
-    [BlockType.BED]: ItemType.BED_BLOCK,
     [BlockType.FURNACE]: ItemType.FURNACE_BLOCK,
-    [BlockType.CRAFTING_TABLE]: ItemType.CRAFTING_TABLE_BLOCK,
-    [BlockType.CHEST]: ItemType.CHEST_BLOCK,
     [BlockType.TORCH]: ItemType.TORCH_BLOCK,
     [BlockType.COAL_ORE]: ItemType.COAL,
-    [BlockType.IRON_ORE]: ItemType.IRON_ORE_BLOCK,
-    [BlockType.GOLD_ORE]: ItemType.GOLD_ORE_BLOCK,
+    [BlockType.IRON_ORE]: ItemType.IRON_INGOT,
+    [BlockType.GOLD_ORE]: ItemType.GOLD_INGOT,
     [BlockType.DIAMOND_ORE]: ItemType.DIAMOND,
-    [BlockType.SANDSTONE]: ItemType.SANDSTONE_BLOCK,
-    [BlockType.ICE]: ItemType.ICE_BLOCK,
-    [BlockType.CACTUS]: ItemType.CACTUS_BLOCK,
-    [BlockType.GRAVEL]: ItemType.GRAVEL_BLOCK,
 };
 
 // ItemType -> BlockType mapping for placement
 export const ITEM_TO_BLOCK: Partial<Record<ItemType, BlockType>> = {
-    [ItemType.GRASS_BLOCK]: BlockType.GRASS,
     [ItemType.DIRT_BLOCK]: BlockType.DIRT,
-    [ItemType.COBBLESTONE_BLOCK]: BlockType.COBBLESTONE,
+    [ItemType.STONE_BLOCK]: BlockType.STONE,
     [ItemType.WOOD_BLOCK]: BlockType.WOOD,
-    [ItemType.LEAVES_BLOCK]: BlockType.LEAVES,
-    [ItemType.SAND_BLOCK]: BlockType.SAND,
     [ItemType.PLANKS_BLOCK]: BlockType.PLANKS,
-    [ItemType.BRICK_BLOCK]: BlockType.BRICK,
-    [ItemType.GLASS_BLOCK]: BlockType.GLASS,
-    [ItemType.SNOW_BLOCK]: BlockType.SNOW,
+    [ItemType.COBBLESTONE_BLOCK]: BlockType.COBBLESTONE,
     [ItemType.CAMPFIRE_BLOCK]: BlockType.CAMPFIRE,
-    [ItemType.TENT_BLOCK]: BlockType.TENT,
-    [ItemType.BED_BLOCK]: BlockType.BED,
     [ItemType.FURNACE_BLOCK]: BlockType.FURNACE,
-    [ItemType.CRAFTING_TABLE_BLOCK]: BlockType.CRAFTING_TABLE,
-    [ItemType.CHEST_BLOCK]: BlockType.CHEST,
     [ItemType.TORCH_BLOCK]: BlockType.TORCH,
-    [ItemType.COAL_ORE_BLOCK]: BlockType.COAL_ORE,
-    [ItemType.IRON_ORE_BLOCK]: BlockType.IRON_ORE,
-    [ItemType.GOLD_ORE_BLOCK]: BlockType.GOLD_ORE,
-    [ItemType.DIAMOND_ORE_BLOCK]: BlockType.DIAMOND_ORE,
-    [ItemType.SANDSTONE_BLOCK]: BlockType.SANDSTONE,
-    [ItemType.ICE_BLOCK]: BlockType.ICE,
-    [ItemType.CACTUS_BLOCK]: BlockType.CACTUS,
-    [ItemType.GRAVEL_BLOCK]: BlockType.GRAVEL,
 };
 
 export const PLACEABLE_BLOCKS: BlockType[] = [
-    BlockType.GRASS,
     BlockType.DIRT,
     BlockType.STONE,
     BlockType.WOOD,
     BlockType.PLANKS,
     BlockType.COBBLESTONE,
-    BlockType.BRICK,
-    BlockType.SAND,
-    BlockType.GLASS,
-    BlockType.SNOW,
 ];
 
 export const FOOD_ITEMS: FoodItem[] = [
-    { itemType: ItemType.APPLE, hungerRestore: 10, hpRestore: 5, epRestore: 10 },
-    { itemType: ItemType.BREAD, hungerRestore: 20, hpRestore: 10, epRestore: 15 },
-    { itemType: ItemType.RAW_BEEF, hungerRestore: 15, hpRestore: 5, epRestore: 10 },
-    { itemType: ItemType.STEAK, hungerRestore: 40, hpRestore: 20, epRestore: 30 },
-    { itemType: ItemType.RAW_CHICKEN, hungerRestore: 10, hpRestore: 3, epRestore: 8 },
-    { itemType: ItemType.COOKED_CHICKEN, hungerRestore: 30, hpRestore: 15, epRestore: 20 },
-    { itemType: ItemType.CARROT, hungerRestore: 10, hpRestore: 5, epRestore: 10 },
-    { itemType: ItemType.BAKED_POTATO, hungerRestore: 25, hpRestore: 12, epRestore: 15 },
-    { itemType: ItemType.MUSHROOM_STEW, hungerRestore: 30, hpRestore: 15, epRestore: 20 },
-    { itemType: ItemType.CAKE, hungerRestore: 10, hpRestore: 5, epRestore: 10 },
-    { itemType: ItemType.GOLDEN_APPLE, hungerRestore: 40, hpRestore: 100, epRestore: 100 },
+    { itemType: ItemType.APPLE, hungerRestore: 20, hpRestore: 10, epRestore: 20 },
+    { itemType: ItemType.BAKED_APPLE, hungerRestore: 40, hpRestore: 20, epRestore: 40 },
 ];
 
 export const FOOD_MAP: Map<ItemType, FoodItem> = new Map(
@@ -285,17 +238,12 @@ export const FACE_NORMALS: [number, number, number][] = [
 ];
 
 // Tool durability
+// Tool durability
 export const TOOL_DURABILITY: Partial<Record<ItemType, number>> = {
     [ItemType.WOODEN_PICKAXE]: 60,
     [ItemType.STONE_PICKAXE]: 132,
     [ItemType.IRON_PICKAXE]: 251,
     [ItemType.DIAMOND_PICKAXE]: 1562,
-    [ItemType.WOODEN_AXE]: 60,
-    [ItemType.STONE_AXE]: 132,
-    [ItemType.IRON_AXE]: 251,
-    [ItemType.WOODEN_SHOVEL]: 60,
-    [ItemType.STONE_SHOVEL]: 132,
-    [ItemType.WOODEN_SWORD]: 60,
 };
 
 // EP costs
@@ -354,17 +302,6 @@ export const CRAFTING_RECIPES: CraftingRecipe[] = [
         pattern: [[ItemType.WOOD_BLOCK, null, null], [null, null, null], [null, null, null]],
         requiresCraftingTable: false,
     },
-    // Crafting Table
-    {
-        result: ItemType.CRAFTING_TABLE_BLOCK,
-        count: 1,
-        pattern: [
-            [ItemType.PLANKS_BLOCK, ItemType.PLANKS_BLOCK, null],
-            [ItemType.PLANKS_BLOCK, ItemType.PLANKS_BLOCK, null],
-            [null, null, null],
-        ],
-        requiresCraftingTable: false,
-    },
     // Sticks (from Planks)
     {
         result: ItemType.STICK,
@@ -372,6 +309,17 @@ export const CRAFTING_RECIPES: CraftingRecipe[] = [
         pattern: [
             [ItemType.PLANKS_BLOCK, null, null],
             [ItemType.PLANKS_BLOCK, null, null],
+            [null, null, null],
+        ],
+        requiresCraftingTable: false,
+    },
+    // Torch (from Coal + Stick)
+    {
+        result: ItemType.TORCH_BLOCK,
+        count: 4,
+        pattern: [
+            [ItemType.COAL, null, null],
+            [ItemType.STICK, null, null],
             [null, null, null],
         ],
         requiresCraftingTable: false,
@@ -420,39 +368,6 @@ export const CRAFTING_RECIPES: CraftingRecipe[] = [
         ],
         requiresCraftingTable: true,
     },
-    // Wooden Axe
-    {
-        result: ItemType.WOODEN_AXE,
-        count: 1,
-        pattern: [
-            [ItemType.PLANKS_BLOCK, ItemType.PLANKS_BLOCK, null],
-            [ItemType.PLANKS_BLOCK, ItemType.STICK, null],
-            [null, ItemType.STICK, null],
-        ],
-        requiresCraftingTable: true,
-    },
-    // Stone Axe
-    {
-        result: ItemType.STONE_AXE,
-        count: 1,
-        pattern: [
-            [ItemType.COBBLESTONE_BLOCK, ItemType.COBBLESTONE_BLOCK, null],
-            [ItemType.COBBLESTONE_BLOCK, ItemType.STICK, null],
-            [null, ItemType.STICK, null],
-        ],
-        requiresCraftingTable: true,
-    },
-    // Iron Axe
-    {
-        result: ItemType.IRON_AXE,
-        count: 1,
-        pattern: [
-            [ItemType.IRON_INGOT, ItemType.IRON_INGOT, null],
-            [ItemType.IRON_INGOT, ItemType.STICK, null],
-            [null, ItemType.STICK, null],
-        ],
-        requiresCraftingTable: true,
-    },
     // Wooden Sword
     {
         result: ItemType.WOODEN_SWORD,
@@ -464,38 +379,38 @@ export const CRAFTING_RECIPES: CraftingRecipe[] = [
         ],
         requiresCraftingTable: true,
     },
-    // Wooden Shovel
+    // Stone Sword
     {
-        result: ItemType.WOODEN_SHOVEL,
-        count: 1,
-        pattern: [
-            [ItemType.PLANKS_BLOCK, null, null],
-            [ItemType.STICK, null, null],
-            [ItemType.STICK, null, null],
-        ],
-        requiresCraftingTable: true,
-    },
-    // Stone Shovel
-    {
-        result: ItemType.STONE_SHOVEL,
+        result: ItemType.STONE_SWORD,
         count: 1,
         pattern: [
             [ItemType.COBBLESTONE_BLOCK, null, null],
-            [ItemType.STICK, null, null],
+            [ItemType.COBBLESTONE_BLOCK, null, null],
             [ItemType.STICK, null, null],
         ],
         requiresCraftingTable: true,
     },
-    // Torch
+    // Iron Sword
     {
-        result: ItemType.TORCH_BLOCK,
-        count: 4,
+        result: ItemType.IRON_SWORD,
+        count: 1,
         pattern: [
-            [ItemType.COAL, null, null],
+            [ItemType.IRON_INGOT, null, null],
+            [ItemType.IRON_INGOT, null, null],
             [ItemType.STICK, null, null],
-            [null, null, null],
         ],
-        requiresCraftingTable: false,
+        requiresCraftingTable: true,
+    },
+    // Diamond Sword
+    {
+        result: ItemType.DIAMOND_SWORD,
+        count: 1,
+        pattern: [
+            [ItemType.DIAMOND, null, null],
+            [ItemType.DIAMOND, null, null],
+            [ItemType.STICK, null, null],
+        ],
+        requiresCraftingTable: true,
     },
     // Furnace
     {
@@ -505,17 +420,6 @@ export const CRAFTING_RECIPES: CraftingRecipe[] = [
             [ItemType.COBBLESTONE_BLOCK, ItemType.COBBLESTONE_BLOCK, ItemType.COBBLESTONE_BLOCK],
             [ItemType.COBBLESTONE_BLOCK, null, ItemType.COBBLESTONE_BLOCK],
             [ItemType.COBBLESTONE_BLOCK, ItemType.COBBLESTONE_BLOCK, ItemType.COBBLESTONE_BLOCK],
-        ],
-        requiresCraftingTable: true,
-    },
-    // Chest
-    {
-        result: ItemType.CHEST_BLOCK,
-        count: 1,
-        pattern: [
-            [ItemType.PLANKS_BLOCK, ItemType.PLANKS_BLOCK, ItemType.PLANKS_BLOCK],
-            [ItemType.PLANKS_BLOCK, null, ItemType.PLANKS_BLOCK],
-            [ItemType.PLANKS_BLOCK, ItemType.PLANKS_BLOCK, ItemType.PLANKS_BLOCK],
         ],
         requiresCraftingTable: true,
     },
@@ -529,126 +433,5 @@ export const CRAFTING_RECIPES: CraftingRecipe[] = [
             [null, ItemType.WOOD_BLOCK, null],
         ],
         requiresCraftingTable: true,
-    },
-    // Bed
-    {
-        result: ItemType.BED_BLOCK,
-        count: 1,
-        pattern: [
-            [ItemType.WOOL, ItemType.WOOL, ItemType.WOOL],
-            [ItemType.PLANKS_BLOCK, ItemType.PLANKS_BLOCK, ItemType.PLANKS_BLOCK],
-            [null, null, null],
-        ],
-        requiresCraftingTable: true,
-    },
-    // Tent
-    {
-        result: ItemType.TENT_BLOCK,
-        count: 1,
-        pattern: [
-            [ItemType.WOOL, ItemType.WOOL, ItemType.WOOL],
-            [ItemType.STICK, null, ItemType.STICK],
-            [ItemType.STICK, ItemType.STICK, ItemType.STICK],
-        ],
-        requiresCraftingTable: true,
-    },
-    // Brick
-    {
-        result: ItemType.BRICK_BLOCK,
-        count: 1,
-        pattern: [
-            [ItemType.DIRT_BLOCK, ItemType.DIRT_BLOCK, null],
-            [ItemType.DIRT_BLOCK, ItemType.DIRT_BLOCK, null],
-            [null, null, null],
-        ],
-        requiresCraftingTable: false,
-    },
-    // Glass (smelting sand - simplified as crafting)
-    {
-        result: ItemType.GLASS_BLOCK,
-        count: 1,
-        pattern: [
-            [ItemType.SAND_BLOCK, ItemType.COAL, null],
-            [null, null, null],
-            [null, null, null],
-        ],
-        requiresCraftingTable: false,
-    },
-    // Bread
-    {
-        result: ItemType.BREAD,
-        count: 1,
-        pattern: [
-            [ItemType.WHEAT, ItemType.WHEAT, ItemType.WHEAT],
-            [null, null, null],
-            [null, null, null],
-        ],
-        requiresCraftingTable: true,
-    },
-    // Cake
-    {
-        result: ItemType.CAKE,
-        count: 1,
-        pattern: [
-            [ItemType.WHEAT, ItemType.SUGAR, ItemType.EGG],
-            [ItemType.WHEAT, ItemType.WHEAT, ItemType.WHEAT],
-            [null, null, null],
-        ],
-        requiresCraftingTable: true,
-    },
-    // Mushroom Stew
-    {
-        result: ItemType.MUSHROOM_STEW,
-        count: 1,
-        pattern: [
-            [ItemType.RED_MUSHROOM, ItemType.BROWN_MUSHROOM, null],
-            [null, ItemType.BOWL, null],
-            [null, null, null],
-        ],
-        requiresCraftingTable: false,
-    },
-    // Golden Apple
-    {
-        result: ItemType.GOLDEN_APPLE,
-        count: 1,
-        pattern: [
-            [ItemType.GOLD_INGOT, ItemType.GOLD_INGOT, ItemType.GOLD_INGOT],
-            [ItemType.GOLD_INGOT, ItemType.APPLE, ItemType.GOLD_INGOT],
-            [ItemType.GOLD_INGOT, ItemType.GOLD_INGOT, ItemType.GOLD_INGOT],
-        ],
-        requiresCraftingTable: true,
-    },
-    // Iron Ingot (from Iron Ore + Coal)
-    {
-        result: ItemType.IRON_INGOT,
-        count: 1,
-        pattern: [
-            [ItemType.IRON_ORE_BLOCK, ItemType.COAL, null],
-            [null, null, null],
-            [null, null, null],
-        ],
-        requiresCraftingTable: false,
-    },
-    // Gold Ingot (from Gold Ore + Coal)
-    {
-        result: ItemType.GOLD_INGOT,
-        count: 1,
-        pattern: [
-            [ItemType.GOLD_ORE_BLOCK, ItemType.COAL, null],
-            [null, null, null],
-            [null, null, null],
-        ],
-        requiresCraftingTable: false,
-    },
-    // Bowl
-    {
-        result: ItemType.BOWL,
-        count: 4,
-        pattern: [
-            [ItemType.PLANKS_BLOCK, null, ItemType.PLANKS_BLOCK],
-            [null, ItemType.PLANKS_BLOCK, null],
-            [null, null, null],
-        ],
-        requiresCraftingTable: false,
     },
 ];

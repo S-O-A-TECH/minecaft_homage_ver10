@@ -117,4 +117,17 @@ export class TimeSystem {
     private lerp(a: number, b: number, t: number): number {
         return a + (b - a) * Math.max(0, Math.min(1, t));
     }
+
+    getState(): any {
+        return {
+            time: this.time,
+            dayCount: this.dayCount
+        };
+    }
+
+    setState(data: any): void {
+        this.time = data.time || 0;
+        this.dayCount = data.dayCount || 1;
+        this.updateLighting();
+    }
 }

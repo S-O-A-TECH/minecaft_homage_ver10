@@ -16,7 +16,6 @@ export enum BlockType {
     TENT = 14,
     BED = 15,
     FURNACE = 16,
-    CRAFTING_TABLE = 17,
     CHEST = 18,
     TORCH = 19,
     COAL_ORE = 20,
@@ -27,80 +26,43 @@ export enum BlockType {
     ICE = 25,
     CACTUS = 26,
     GRAVEL = 27,
+    LAVA = 28,
 }
 
 export enum ItemType {
-    // Block items (100+)
-    GRASS_BLOCK = 100,
-    DIRT_BLOCK = 101,
-    STONE_BLOCK = 102,
-    WOOD_BLOCK = 103,
-    LEAVES_BLOCK = 104,
-    SAND_BLOCK = 105,
-    PLANKS_BLOCK = 106,
-    COBBLESTONE_BLOCK = 107,
-    BRICK_BLOCK = 108,
-    GLASS_BLOCK = 109,
-    SNOW_BLOCK = 110,
-    CAMPFIRE_BLOCK = 111,
-    TENT_BLOCK = 112,
-    BED_BLOCK = 113,
-    FURNACE_BLOCK = 114,
-    CRAFTING_TABLE_BLOCK = 115,
-    CHEST_BLOCK = 116,
-    TORCH_BLOCK = 117,
-    COAL_ORE_BLOCK = 118,
-    IRON_ORE_BLOCK = 119,
-    GOLD_ORE_BLOCK = 120,
-    DIAMOND_ORE_BLOCK = 121,
-    SANDSTONE_BLOCK = 122,
-    ICE_BLOCK = 123,
-    CACTUS_BLOCK = 124,
-    GRAVEL_BLOCK = 125,
+    // 블록류 아이템 (100+)
+    DIRT_BLOCK = 100,
+    STONE_BLOCK = 101,
+    WOOD_BLOCK = 102,
+    PLANKS_BLOCK = 103,
+    COBBLESTONE_BLOCK = 104,
+    FURNACE_BLOCK = 106,
+    CAMPFIRE_BLOCK = 107,
+    TORCH_BLOCK = 108,
 
-    // Tools (200+)
+    // 도구류 곡괭이 4종 (200+)
     WOODEN_PICKAXE = 200,
     STONE_PICKAXE = 201,
     IRON_PICKAXE = 202,
     DIAMOND_PICKAXE = 203,
-    WOODEN_AXE = 204,
-    STONE_AXE = 205,
-    IRON_AXE = 206,
-    WOODEN_SHOVEL = 207,
-    STONE_SHOVEL = 208,
-    WOODEN_SWORD = 209,
+    WOODEN_SWORD = 210,
+    STONE_SWORD = 211,
+    IRON_SWORD = 212,
+    DIAMOND_SWORD = 213,
 
-    // Food (300+)
+    // 필수 음식 (300+)
     APPLE = 300,
-    BREAD = 301,
-    RAW_BEEF = 302,
-    STEAK = 303,
-    RAW_CHICKEN = 304,
-    COOKED_CHICKEN = 305,
-    CARROT = 306,
-    BAKED_POTATO = 307,
-    MUSHROOM_STEW = 308,
-    CAKE = 309,
-    GOLDEN_APPLE = 310,
+    BAKED_APPLE = 301,
 
-    // Resources (400+)
+    // 필수 자원 (400+)
     STICK = 400,
     COAL = 401,
     IRON_INGOT = 402,
     GOLD_INGOT = 403,
     DIAMOND = 404,
-    STRING = 405,
-    FEATHER = 406,
-    LEATHER = 407,
-    BOWL = 408,
-    WOOL = 409,
-    SUGAR = 410,
-    EGG = 411,
-    WHEAT = 412,
-    POTATO = 413,
-    RED_MUSHROOM = 414,
-    BROWN_MUSHROOM = 415,
+    EMERALD = 405,
 }
+
 
 export interface BlockPosition {
     x: number;
@@ -127,6 +89,7 @@ export interface RaycastResult {
     face: BlockFace;
     normal: BlockPosition;
     distance: number;
+    exactHitPoint?: THREE.Vector3;
 }
 
 export interface GameConfig {
@@ -159,6 +122,7 @@ export interface PlayerStatsData {
     maxEp: number;
     hunger: number;
     maxHunger: number;
+    saturation: number;
 }
 
 export interface FoodItem {
@@ -187,4 +151,34 @@ export interface BiomeData {
     treeDensity: number;
     treeWoodType: BlockType;
     treeLeafType: BlockType;
+}
+
+export enum MobType {
+    ZOMBIE = 'zombie',
+    SKELETON = 'skeleton',
+    CREEPER = 'creeper',
+    VILLAGER = 'villager',
+}
+
+export enum VillagerProfession {
+    FARMER = 'farmer',
+    WEAPONSMITH = 'weaponsmith',
+    CLERIC = 'cleric',
+}
+
+export interface VillagerTrade {
+    inputItem: ItemType;
+    inputCount: number;
+    outputItem: ItemType;
+    outputCount: number;
+    demand: number;
+    maxUses: number;
+    uses: number;
+}
+
+export enum VillagerState {
+    WANDER = 'wander',
+    WORK = 'work',
+    WELL = 'well',
+    SLEEP = 'sleep',
 }

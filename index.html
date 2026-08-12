@@ -33,28 +33,66 @@
             width: 20px;
             height: 20px;
             pointer-events: none;
-            z-index: 10;
+            z-index: 9999;
+            display: none;
         }
 
         #crosshair::before,
         #crosshair::after {
             content: '';
             position: absolute;
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.9);
         }
 
         #crosshair::before {
             width: 2px;
-            height: 100%;
+            height: 16px;
             left: 50%;
-            transform: translateX(-50%);
+            top: 50%;
+            transform: translate(-50%, -50%);
         }
 
         #crosshair::after {
             height: 2px;
-            width: 100%;
+            width: 16px;
+            left: 50%;
             top: 50%;
-            transform: translateY(-50%);
+            transform: translate(-50%, -50%);
+        }
+
+        /* === BLOCK TOOLTIP === */
+        #block-tooltip {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, 40px);
+            color: #fff;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            z-index: 10;
+            pointer-events: none;
+            background: rgba(0, 0, 0, 0.75);
+            padding: 4px 12px;
+            border-radius: 4px;
+            text-align: center;
+            white-space: nowrap;
+            display: none;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        /* === CURSOR DOT === */
+        #cursor-dot {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 11;
+            display: none;
         }
 
         /* === HUD === */
@@ -271,19 +309,52 @@
             background: rgba(255, 255, 255, 0.1);
         }
 
-        /* === CRAFTING OVERLAY === */
-        #crafting-overlay {
+        .inventory-slot.swap-selected {
+            border-color: #f1c40f;
+            box-shadow: 0 0 10px rgba(241, 196, 15, 0.5);
+            background: rgba(241, 196, 15, 0.2);
+        }
+
+        .slot-count {
+            position: absolute;
+            bottom: 2px;
+            right: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 1px 1px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000,
+                         0px 1px 0px #000, 0px -1px 0px #000, 1px 0px 0px #000, -1px 0px 0px #000;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        /* === UNIFIED UI OVERLAY === */
+        #ui-overlay {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
             background: rgba(0, 0, 0, 0.7);
-            z-index: 35;
+            z-index: 30;
             display: none;
-            flex-direction: column;
+            flex-direction: row;
             align-items: center;
             justify-content: center;
+            gap: 40px;
+            padding: 20px;
+        }
+
+        .ui-panel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .ui-title {
+            color: #fff;
+            font-size: 20px;
+            margin-bottom: 10px;
         }
 
         #crafting-title {
@@ -295,13 +366,12 @@
         #crafting-container {
             display: flex;
             gap: 20px;
-            max-width: 800px;
+            width: 500px;
             max-height: 500px;
-            width: 90%;
         }
 
         #recipe-list {
-            flex: 1;
+            flex: 0 0 220px;
             overflow-y: auto;
             background: rgba(0, 0, 0, 0.5);
             border-radius: 8px;
@@ -351,6 +421,10 @@
 
         .recipe-name {
             flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding-right: 4px;
         }
 
         .recipe-table-req {
@@ -552,6 +626,8 @@
 
 <body>
     <div id="crosshair"></div>
+    <div id="block-tooltip"></div>
+    <div id="cursor-dot"></div>
 
     <!-- HUD -->
     <div id="hud">
@@ -598,19 +674,20 @@
     <!-- Mode indicator -->
     <div id="mode-indicator">🖱️ Cursor Mode</div>
 
-    <!-- Inventory -->
-    <div id="inventory-overlay">
-        <div id="inventory-title">Inventory (Press E to close)</div>
-        <div id="inventory-grid"></div>
-    </div>
-
-    <!-- Crafting -->
-    <div id="crafting-overlay">
-        <div id="crafting-title">🔨 Crafting</div>
-        <div id="crafting-container">
-            <div id="recipe-list"></div>
-            <div id="recipe-detail">
-                <div class="recipe-detail-placeholder">Select a recipe to view details</div>
+    <!-- Unified UI (Inventory + Crafting) -->
+    <div id="ui-overlay">
+        <div class="ui-panel" id="inventory-panel">
+            <div class="ui-title">Inventory (Press E to close)</div>
+            <div id="inventory-grid"></div>
+        </div>
+        
+        <div class="ui-panel" id="crafting-panel">
+            <div class="ui-title" id="crafting-title">🔨 Crafting</div>
+            <div id="crafting-container">
+                <div id="recipe-list"></div>
+                <div id="recipe-detail">
+                    <div class="recipe-detail-placeholder">Select a recipe to view details</div>
+                </div>
             </div>
         </div>
     </div>

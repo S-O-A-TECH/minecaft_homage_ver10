@@ -9,6 +9,7 @@ import { World } from './World';
 export class Chunk {
     public position: ChunkPosition;
     public blocks: Uint8Array;
+    public liquidLevels: Uint8Array;
     public mesh: THREE.Mesh | null = null;
     public isDirty: boolean = true;
     private scene: THREE.Scene;
@@ -30,6 +31,7 @@ export class Chunk {
         this.textureAtlas = textureAtlas;
         this.world = world;
         this.blocks = new Uint8Array(CHUNK_VOLUME);
+        this.liquidLevels = new Uint8Array(CHUNK_VOLUME);
         this.meshBuilder = new ChunkMeshBuilder(this, textureAtlas, world);
         this.generateTerrain();
     }
@@ -50,6 +52,27 @@ export class Chunk {
             return;
         }
         this.blocks[this.getIndex(lx, ly, lz)] = type;
+        
+        // If block is changed to a non-liquid type, reset its liquid level to 0
+        if (type !== BlockType.WATER && type !== BlockType.LAVA) {
+            this.liquidLevels[this.getIndex(lx, ly, lz)] = 0;
+        }
+        
+        this.isDirty = true;
+    }
+
+    getLiquidLevel(lx: number, ly: number, lz: number): number {
+        if (lx < 0 || lx >= CHUNK_SIZE || ly < 0 || ly >= WORLD_HEIGHT || lz < 0 || lz >= CHUNK_SIZE) {
+            return 0;
+        }
+        return this.liquidLevels[this.getIndex(lx, ly, lz)];
+    }
+
+    setLiquidLevel(lx: number, ly: number, lz: number, level: number): void {
+        if (lx < 0 || lx >= CHUNK_SIZE || ly < 0 || ly >= WORLD_HEIGHT || lz < 0 || lz >= CHUNK_SIZE) {
+            return;
+        }
+        this.liquidLevels[this.getIndex(lx, ly, lz)] = level;
         this.isDirty = true;
     }
 
@@ -86,11 +109,17 @@ export class Chunk {
                     this.blocks[this.getIndex(lx, ly, lz)] = blockType;
                 }
 
-                // Generate trees
-                if (lx > 2 && lx < CHUNK_SIZE - 2 && lz > 2 && lz < CHUNK_SIZE - 2) {
-                    const treeChance = this.noiseGen.get3D(wx, 0, wz);
-                    if (treeChance > 0.3 && height > 40 && height < 100) {
-                        this.generateTree(lx, height + 1, lz);
+                // Generate trees: ONLY outside the village blend region (radius = 46) to keep streets, houses, and farms clear!
+                const dx = wx - 64;
+                const dz = wz - 64;
+                const dist = Math.max(Math.abs(dx), Math.abs(dz));
+
+                if (dist > 46) {
+                    if (lx > 2 && lx < CHUNK_SIZE - 2 && lz > 2 && lz < CHUNK_SIZE - 2) {
+                        const treeChance = this.noiseGen.get3D(wx, 0, wz);
+                        if (treeChance > 0.3 && height > 40 && height < 100) {
+                            this.generateTree(lx, height + 1, lz);
+                        }
                     }
                 }
             }
